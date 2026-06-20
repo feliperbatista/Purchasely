@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="Purchasely.API/Purchasely.API.csproj" />
+  <Project Path="Purchasely.Application/Purchasely.Application.csproj" />
+  <Project Path="Purchasely.Domain/Purchasely.Domain.csproj" />
+  <Project Path="Purchasely.Infrastructure/Purchasely.Infrastructure.csproj" />
+</Solution>

@@ -1,0 +1,29 @@
+# Visual Studio
+.vs/
+bin/
+obj/
+
+# VS Code
+.vscode/
+
+# Node
+node_modules/
+dist/
+
+# Logs
+*.log
+
+# Environment
+.env
+.env.*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Coverage
+coverage/
+
+# EF Migrations Snapshot
+*.user
+*.suo

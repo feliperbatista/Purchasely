@@ -4,9 +4,9 @@ public class Supplier
 {
     public Guid Id { get; set; }
     public required string Name { get; set; }
-    public string Email { get; set; } = string.Empty;
-    public string Phone { get; set; } = string.Empty;
-    public string Address { get; set; } = string.Empty;
+    public required string Email { get; set; }
+    public required string Phone { get; set; }
+    public required string Address { get; set; }
     public required string TaxNumber { get; set; }
     public bool IsActive { get; set; }
     public DateTime CreatedAt { get; set; }
@@ -22,7 +22,7 @@ public class Supplier
             Email = email,
             Phone = phone,
             Address = address,
-            TaxNumber = taxNumber,
+            TaxNumber = NormalizeTaxNumber(taxNumber),
             IsActive = true,
             CreatedAt = DateTime.UtcNow
         };
@@ -34,11 +34,16 @@ public class Supplier
         Email = email;
         Phone = phone;
         Address = address;
-        TaxNumber = taxNumber;
+        TaxNumber = NormalizeTaxNumber(taxNumber);
     }
 
     public void Disable()
     {
         IsActive = false;
+    }
+
+    private static string NormalizeTaxNumber(string taxNumber)
+    {
+        return new string([.. taxNumber.Where(char.IsDigit)]);
     }
 }

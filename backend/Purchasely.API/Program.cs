@@ -1,10 +1,11 @@
+using Purchasely.Application.Extensions;
 using Purchasely.Infrastructure.Extensions;
 using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddInfrastructure(builder.Configuration);
-//builder.Services.AddApplication();
+builder.Services.AddApplication();
 
 builder.Services.AddOpenApi();
 builder.Services.AddControllers();

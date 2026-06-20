@@ -4,10 +4,10 @@ namespace Purchasely.Application.Interfaces;
 
 public interface ISupplierRepository
 {
-    Task<Supplier?> GetByIdAsync(Guid id);
-    Task<List<Supplier>> GetAllAsync();
-    Task AddAsync(Supplier supplier);
-    void Update(Supplier supplier);
+    Task<Supplier?> GetByIdAsync(Guid id, CancellationToken cancellationToken);
+    Task<Supplier?> GetByTaxNumberAsync(string taxNumber, CancellationToken cancellationToken);
+    Task<List<Supplier>> GetAllAsync(CancellationToken cancellationToken);
+    Task AddAsync(Supplier supplier, CancellationToken cancellationToken);
     void Delete(Supplier supplier);
-    Task SaveChangesAsync();
+    Task SaveChangesAsync(CancellationToken cancellationToken);
 }

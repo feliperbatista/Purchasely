@@ -7,9 +7,9 @@ namespace Purchasely.Infrastructure.Repositories;
 
 public class SupplierRepository(AppDbContext context) : ISupplierRepository
 {
-    public async Task AddAsync(Supplier supplier)
+    public async Task AddAsync(Supplier supplier, CancellationToken cancellationToken)
     {
-        await context.Suppliers.AddAsync(supplier);
+        await context.Suppliers.AddAsync(supplier, cancellationToken);
     }
 
     public void Delete(Supplier supplier)
@@ -17,26 +17,27 @@ public class SupplierRepository(AppDbContext context) : ISupplierRepository
         context.Suppliers.Remove(supplier);
     }
 
-    public async Task<List<Supplier>> GetAllAsync()
+    public async Task<List<Supplier>> GetAllAsync(CancellationToken cancellationToken)
     {
         return await context.Suppliers
             .AsNoTracking()
-            .ToListAsync();
+            .ToListAsync(cancellationToken);
     }
 
-    public async Task<Supplier?> GetByIdAsync(Guid id)
+    public async Task<Supplier?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
     {
         return await context.Suppliers
-            .FirstOrDefaultAsync(x => x.Id == id);
+            .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
     }
 
-    public async Task SaveChangesAsync()
+    public async Task<Supplier?> GetByTaxNumberAsync(string taxNumber, CancellationToken cancellationToken)
     {
-        await context.SaveChangesAsync();
+        return await context.Suppliers
+            .FirstOrDefaultAsync(x => x.TaxNumber == taxNumber, cancellationToken);
     }
 
-    public void Update(Supplier supplier)
+    public async Task SaveChangesAsync(CancellationToken cancellationToken)
     {
-        context.Suppliers.Update(supplier);
+        await context.SaveChangesAsync(cancellationToken);
     }
 }

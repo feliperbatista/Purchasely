@@ -1,5 +1,8 @@
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Purchasely.Application.DTOs;
+using Purchasely.Application.Features.Suppliers.Commands;
+using Purchasely.Application.Features.Suppliers.Queries;
 using Purchasely.Application.Interfaces;
 using Purchasely.Domain.Entities;
 
@@ -7,64 +10,59 @@ namespace Purchasely.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class SuppliersController(ISupplierRepository repository) : ControllerBase
+public class SuppliersController(IMediator mediator) : ControllerBase
 {
     [HttpGet]
-    public async Task<IActionResult> GetAll()
+    public async Task<IActionResult> GetAll(CancellationToken cancellationToken)
     {
-        var suppliers = await repository.GetAllAsync();
+        var result = await mediator.Send(new GetSuppliersQuery(), cancellationToken);
+        if (!result.IsSuccess)
+            return StatusCode(result.StatusCode, result.Errors);
 
-        return Ok(suppliers);
+        return Ok(result.Value);
     }
 
-    [HttpGet("{id}")]
-    public async Task<IActionResult> GetById(Guid id)
+    [HttpGet("{id:guid}")]
+    public async Task<IActionResult> GetById(Guid id, CancellationToken cancellationToken)
     {
-        var supplier = await repository.GetByIdAsync(id);
+        var result = await mediator.Send(new GetSupplierByIdQuery(id), cancellationToken);
 
-        if (supplier is null)
-            return NotFound();
+        if (!result.IsSuccess)
+            return StatusCode(result.StatusCode, result.Errors);
 
-        return Ok(supplier);
+        return Ok(result.Value);
     }
 
     [HttpPost]
-    public async Task<IActionResult> Create(CreateSupplierRequest request)
+    public async Task<IActionResult> Create([FromBody] CreateSupplierCommand command, CancellationToken cancellationToken)
     {
-        var supplier = Supplier.Create(request.Name, request.Email, request.Phone, request.Address, request.TaxNumber);
+        var result = await mediator.Send(command, cancellationToken);
+        if (!result.IsSuccess)
+            return StatusCode(result.StatusCode, result.Errors);
 
-        await repository.AddAsync(supplier);
-        await repository.SaveChangesAsync();
-
-        return CreatedAtAction(nameof(GetById), new { id = supplier.Id }, supplier);
+        return CreatedAtAction(nameof(GetById), new { id = result.Value!.Id }, result.Value);
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> Update(Guid id, UpdateSupplierRequest request)
+    public async Task<IActionResult> Update(Guid id, [FromBody] UpdateSupplierRequest request, CancellationToken cancellationToken)
     {
-        var supplier = await repository.GetByIdAsync(id);
+        var command = new UpdateSupplierCommand(id, request.Name, request.Email, request.Phone, request.TaxNumber, request.Address);
 
-        if (supplier is null)
-            return NotFound();
+        var result = await mediator.Send(command, cancellationToken);
 
-        supplier.Update(request.Name, request.Email, request.Phone, request.Address, request.TaxNumber);
-
-        await repository.SaveChangesAsync();
+        if (!result.IsSuccess)
+            return StatusCode(result.StatusCode, result.Errors);
 
         return NoContent();
     }
 
     [HttpDelete("{id}")]
-    public async Task<IActionResult> Delete(Guid id)
+    public async Task<IActionResult> Delete(Guid id, CancellationToken cancellationToken)
     {
-        var supplier = await repository.GetByIdAsync(id);
+        var result = await mediator.Send(new DeleteSupplierCommand(id), cancellationToken);
 
-        if (supplier is null)
-            return NotFound();
-
-        repository.Delete(supplier);
-
-        await repository.SaveChangesAsync();
+        if (!result.IsSuccess)
+            return StatusCode(result.StatusCode, result.Errors);
 
         return NoContent();
     }

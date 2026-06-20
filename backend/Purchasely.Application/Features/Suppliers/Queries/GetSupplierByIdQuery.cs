@@ -6,20 +6,20 @@ using Purchasely.Application.Interfaces;
 
 namespace Purchasely.Application.Features.Suppliers.Queries;
 
-public record GetSupplierByIdQuery(Guid Id) : IRequest<Result<SupplierResponse>>;
+public record GetSupplierByIdQuery(Guid Id) : IRequest<Result<SupplierDetailsResponse>>;
 
 public class GetSupplierByIdQueryHandler(
     ISupplierRepository repository,
     IMapper mapper
-) : IRequestHandler<GetSupplierByIdQuery, Result<SupplierResponse>>
+) : IRequestHandler<GetSupplierByIdQuery, Result<SupplierDetailsResponse>>
 {
-    public async Task<Result<SupplierResponse>> Handle(GetSupplierByIdQuery request, CancellationToken cancellationToken)
+    public async Task<Result<SupplierDetailsResponse>> Handle(GetSupplierByIdQuery request, CancellationToken cancellationToken)
     {
         var supplier = await repository.GetByIdAsync(request.Id, cancellationToken);
 
         if (supplier is null)
-            return Result<SupplierResponse>.Failure(404, "Supplier not found");
+            return Result<SupplierDetailsResponse>.Failure(404, "Supplier not found");
 
-        return Result<SupplierResponse>.Success(mapper.Map<SupplierResponse>(supplier));
+        return Result<SupplierDetailsResponse>.Success(mapper.Map<SupplierDetailsResponse>(supplier));
     }
 }

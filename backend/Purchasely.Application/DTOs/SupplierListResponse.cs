@@ -1,11 +1,9 @@
 namespace Purchasely.Application.DTOs;
 
-public record SupplierResponse(
+public record SupplierListResponse(
     Guid Id,
     string Name,
     string Email,
     string Phone,
-    string TaxNumber,
-    string Address,
     bool IsActive
 );

@@ -27,6 +27,7 @@ public class SupplierRepository(AppDbContext context) : ISupplierRepository
     public async Task<Supplier?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
     {
         return await context.Suppliers
+            .Include(s => s.Products)
             .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
     }
 

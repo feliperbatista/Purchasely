@@ -6,16 +6,16 @@ using Purchasely.Application.Interfaces;
 
 namespace Purchasely.Application.Features.Suppliers.Queries;
 
-public record GetSuppliersQuery : IRequest<Result<List<SupplierResponse>>>;
+public record GetSuppliersQuery : IRequest<Result<List<SupplierListResponse>>>;
 
 public class GetSuppliersQueryHandler(
     ISupplierRepository repository,
     IMapper mapper
-) : IRequestHandler<GetSuppliersQuery, Result<List<SupplierResponse>>>
+) : IRequestHandler<GetSuppliersQuery, Result<List<SupplierListResponse>>>
 {
-    public async Task<Result<List<SupplierResponse>>> Handle(GetSuppliersQuery request, CancellationToken cancellationToken)
+    public async Task<Result<List<SupplierListResponse>>> Handle(GetSuppliersQuery request, CancellationToken cancellationToken)
     {
         var suppliers = await repository.GetAllAsync(cancellationToken);
-        return Result<List<SupplierResponse>>.Success(mapper.Map<List<SupplierResponse>>(suppliers));
+        return Result<List<SupplierListResponse>>.Success(mapper.Map<List<SupplierListResponse>>(suppliers));
     }
 }

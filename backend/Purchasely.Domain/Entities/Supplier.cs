@@ -10,6 +10,7 @@ public class Supplier
     public required string TaxNumber { get; set; }
     public bool IsActive { get; set; }
     public DateTime CreatedAt { get; set; }
+    public ICollection<Product> Products = new List<Product>();
 
     private Supplier() {}
 

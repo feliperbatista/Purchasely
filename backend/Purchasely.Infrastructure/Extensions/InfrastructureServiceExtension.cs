@@ -17,5 +17,6 @@ public static class InfrastructureServiceExtension
         });
 
         services.AddScoped<ISupplierRepository, SupplierRepository>();
+        services.AddScoped<IProductRepository, ProductRepository>();
     }
 }

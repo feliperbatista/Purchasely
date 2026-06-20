@@ -13,24 +13,24 @@ public record CreateSupplierCommand(
     string Phone,
     string TaxNumber,
     string Address
-) : IRequest<Result<SupplierResponse>>;
+) : IRequest<Result<SupplierDetailsResponse>>;
 
 public class CreateSupplierCommandHandler(
     ISupplierRepository repository,
     IMapper mapper
-) : IRequestHandler<CreateSupplierCommand, Result<SupplierResponse>>
+) : IRequestHandler<CreateSupplierCommand, Result<SupplierDetailsResponse>>
 {
-    public async Task<Result<SupplierResponse>> Handle(CreateSupplierCommand request, CancellationToken cancellationToken)
+    public async Task<Result<SupplierDetailsResponse>> Handle(CreateSupplierCommand request, CancellationToken cancellationToken)
     {
         var existingSupplier = await repository.GetByTaxNumberAsync(request.TaxNumber, cancellationToken);
         if (existingSupplier is not null)
-            return Result<SupplierResponse>.Failure(409, "TaxNumber already exists");
+            return Result<SupplierDetailsResponse>.Failure(409, "TaxNumber already exists");
 
         var supplier = Supplier.Create(request.Name, request.Email, request.Phone, request.Address, request.TaxNumber);
         
         await repository.AddAsync(supplier, cancellationToken);
         await repository.SaveChangesAsync(cancellationToken);
 
-        return Result<SupplierResponse>.Success(mapper.Map<SupplierResponse>(supplier));
+        return Result<SupplierDetailsResponse>.Success(mapper.Map<SupplierDetailsResponse>(supplier));
     }
 }

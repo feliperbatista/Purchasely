@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Purchasely.Application.Interfaces;
 using Purchasely.Infrastructure.Persistence;
 using Purchasely.Infrastructure.Repositories;
+using Purchasely.Infrastructure.Services;
 
 namespace Purchasely.Infrastructure.Extensions;
 
@@ -18,5 +19,7 @@ public static class InfrastructureServiceExtension
 
         services.AddScoped<ISupplierRepository, SupplierRepository>();
         services.AddScoped<IProductRepository, ProductRepository>();
+        services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<IJwtService, JwtService>();
     }
 }

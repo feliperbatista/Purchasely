@@ -1,0 +1,25 @@
+using Microsoft.EntityFrameworkCore;
+using Purchasely.Application.Interfaces;
+using Purchasely.Domain.Entities;
+using Purchasely.Infrastructure.Persistence;
+
+namespace Purchasely.Infrastructure.Repositories;
+
+public class UserRepository(AppDbContext context) : IUserRepository
+{
+    public async Task AddAsync(User user, CancellationToken cancellationToken)
+    {
+       await context.Users.AddAsync(user, cancellationToken);
+    }
+
+    public async Task<User?> GetByEmailAsync(string email, CancellationToken cancellationToken)
+    {
+        return await context.Users
+            .FirstOrDefaultAsync(x => x.Email == email, cancellationToken);
+    }
+
+    public async Task SaveChangesAsync(CancellationToken cancellationToken)
+    {
+        await context.SaveChangesAsync(cancellationToken);
+    }
+}

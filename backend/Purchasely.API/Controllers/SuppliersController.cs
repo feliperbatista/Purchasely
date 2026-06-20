@@ -1,4 +1,5 @@
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Purchasely.Application.DTOs;
 using Purchasely.Application.Features.Suppliers.Commands;
@@ -7,6 +8,7 @@ using Purchasely.Application.Features.Suppliers.Queries;
 namespace Purchasely.API.Controllers;
 
 [ApiController]
+[Authorize]
 [Route("api/[controller]")]
 public class SuppliersController(IMediator mediator) : ControllerBase
 {

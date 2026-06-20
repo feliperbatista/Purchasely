@@ -3,8 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using Purchasely.Application.DTOs;
 using Purchasely.Application.Features.Suppliers.Commands;
 using Purchasely.Application.Features.Suppliers.Queries;
-using Purchasely.Application.Interfaces;
-using Purchasely.Domain.Entities;
 
 namespace Purchasely.API.Controllers;
 

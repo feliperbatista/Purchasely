@@ -27,3 +27,6 @@ coverage/
 # EF Migrations Snapshot
 *.user
 *.suo
+
+# ASP.NET Core environment configs
+appsettings.Development.json

@@ -60,6 +60,11 @@ public class Requisition
         SubmittedAt = DateTime.UtcNow;
     }
 
+    public void ConvertToPO()
+    {
+        Status = RequisitionStatus.ConvertedToPO;
+    }
+
     public bool CanTransitionTo(RequisitionStatus newStatus)
     {
         return Status switch

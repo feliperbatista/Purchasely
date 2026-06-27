@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Purchasely.Infrastructure.Persistence;
@@ -11,9 +12,11 @@ using Purchasely.Infrastructure.Persistence;
 namespace Purchasely.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260627223209_AddPurchaseOrderModel")]
+    partial class AddPurchaseOrderModel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -172,11 +175,11 @@ namespace Purchasely.Infrastructure.Migrations
                     b.Property<Guid>("SupplierId")
                         .HasColumnType("uuid");
 
-                    b.Property<decimal>("TaxAmount")
+                    b.Property<decimal>("TaxAmout")
                         .HasPrecision(18, 2)
                         .HasColumnType("numeric(18,2)");
 
-                    b.Property<decimal>("TotalAmount")
+                    b.Property<decimal>("TotalAmout")
                         .HasPrecision(18, 2)
                         .HasColumnType("numeric(18,2)");
 

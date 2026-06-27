@@ -1,5 +1,3 @@
-using Purchasely.Domain.Enums;
-
 namespace Purchasely.Domain.Entities;
 
 public class RequisitionLine

@@ -106,14 +106,14 @@ public class RequisitionController(IMediator mediator) : ControllerBase
 
     [Authorize(Roles = "Buyer,Admin")]
     [HttpPost("{id:guid}/convert-to-po")]
-    public async Task<IActionResult> ConvertToPO([FromRoute] Guid id, CancellationToken cancellationToken)
+    public async Task<IActionResult> ConvertToPO([FromRoute] Guid id, [FromBody] List<CreatePOLineCommand> lineCommands, CancellationToken cancellationToken)
     {
-        // var command = new ChangeRequisitionStatusCommand(id, Domain.Enums.RequisitionStatus.ConvertedToPO);
+        var command = new ConvertRequisitionToPOCommand(id, lineCommands);
 
-        // var result = await mediator.Send(command, cancellationToken);
+        var result = await mediator.Send(command, cancellationToken);
 
-        // return result.IsSuccess ? NoContent() : StatusCode(result.StatusCode, result.Errors);
-
-        return NoContent();
+        return result.IsSuccess 
+            ? Created("", result.Value)
+            : StatusCode(result.StatusCode, result.Errors);
     }
 }

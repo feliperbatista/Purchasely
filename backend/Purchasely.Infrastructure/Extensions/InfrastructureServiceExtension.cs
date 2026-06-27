@@ -25,5 +25,6 @@ public static class InfrastructureServiceExtension
         services.AddScoped<IRequisitionRepository, RequisitionRepository>();
         services.AddScoped<IAuditLogRepository, AuditLogRepository>();
         services.AddScoped<INotificationRepository, NotificationRepository>();
+        services.AddScoped<IPurchaseOrderRepository, PurchaseOrderRepository>();
     }
 }

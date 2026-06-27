@@ -8,7 +8,6 @@ using Purchasely.Domain.Enums;
 namespace Purchasely.Application.Features.Requisitions.Commands;
 
 public record CreateRequisitionCommand(
-    RequisitionStatus Status,
     Priority Priority,
     string? Justification,
     List<CreateRequisitionLinesCommand> Lines
@@ -36,7 +35,7 @@ public class CreateRequisitionCommandHandler(
         var productMap = products.ToDictionary(p => p.Id);
 
         var requisition = Requisition.Create(
-            request.Status,
+            RequisitionStatus.Draft,
             request.Priority,
             request.Justification,
             currentUserService.Id,

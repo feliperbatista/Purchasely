@@ -32,6 +32,14 @@ public class SupplierRepository(AppDbContext context) : ISupplierRepository
             .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
     }
 
+    public async Task<List<Supplier>> GetByIdsAsync(List<Guid> ids, CancellationToken cancellationToken)
+    {
+        return await context.Suppliers
+            .Where(x => ids.Contains(x.Id))
+            .AsNoTracking()
+            .ToListAsync(cancellationToken);
+    }
+
     public async Task<Supplier?> GetByTaxNumberAsync(string taxNumber, CancellationToken cancellationToken)
     {
         return await context.Suppliers

@@ -28,6 +28,7 @@ public class SupplierRepository(AppDbContext context) : ISupplierRepository
     {
         return await context.Suppliers
             .Include(s => s.Products)
+            .ThenInclude(p => p.Product)
             .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
     }
 
@@ -37,8 +38,8 @@ public class SupplierRepository(AppDbContext context) : ISupplierRepository
             .FirstOrDefaultAsync(x => x.TaxNumber == taxNumber, cancellationToken);
     }
 
-    public async Task SaveChangesAsync(CancellationToken cancellationToken)
+    public async Task<bool> SaveChangesAsync(CancellationToken cancellationToken)
     {
-        await context.SaveChangesAsync(cancellationToken);
+        return await context.SaveChangesAsync(cancellationToken) > 0;
     }
 }

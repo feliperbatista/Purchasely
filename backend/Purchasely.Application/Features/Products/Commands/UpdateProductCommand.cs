@@ -8,8 +8,8 @@ public record UpdateProductCommand(
     Guid Id,
     string SKU,
     string Name,
-    decimal UnitPrice,
-    string? Description
+    string? Description,
+    string? Category
 ) : IRequest<Result<Unit>>;
 
 public class UpdateProductCommandHandler(
@@ -22,10 +22,12 @@ public class UpdateProductCommandHandler(
         if (product is null)
             return Result<Unit>.Failure(404, "Product not found");
 
-        product.Update(request.SKU, request.Name, request.UnitPrice, request.Description);
+        product.Update(request.SKU, request.Name, request.Description, request.Category);
         
-        await repository.SaveChangesAsync(cancellationToken);
+        bool saved = await repository.SaveChangesAsync(cancellationToken);
         
-        return Result<Unit>.Success(Unit.Value);
+        return saved
+            ? Result<Unit>.Success(Unit.Value)
+            : Result<Unit>.Failure(400, "Failed saving in database");
     }
 }

@@ -17,12 +17,6 @@ public class ProductRepository(AppDbContext context) : IProductRepository
         context.Products.Remove(product);
     }
 
-    public async Task<bool> ExistsBySupplierAndSKUAsync(Guid supplierId, string sku, CancellationToken cancellationToken)
-    {
-         return await context.Products
-            .AnyAsync(x => x.SKU == sku && x.SupplierId == supplierId, cancellationToken);
-    }
-
     public async Task<List<Product>> GetAllAsync(CancellationToken cancellationToken)
     {
         return await context.Products
@@ -36,8 +30,16 @@ public class ProductRepository(AppDbContext context) : IProductRepository
             .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
     }
 
-    public async Task SaveChangesAsync(CancellationToken cancellationToken)
+    public async Task<List<Product>> GetByIdsAsync(List<Guid> ids, CancellationToken cancellationToken)
     {
-        await context.SaveChangesAsync(cancellationToken);
+        return await context.Products
+            .Where(x => ids.Contains(x.Id))
+            .AsNoTracking()
+            .ToListAsync(cancellationToken);
+    }
+
+    public async Task<bool> SaveChangesAsync(CancellationToken cancellationToken)
+    {
+        return await context.SaveChangesAsync(cancellationToken) > 0;
     }
 }

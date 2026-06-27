@@ -18,8 +18,8 @@ public class UserRepository(AppDbContext context) : IUserRepository
             .FirstOrDefaultAsync(x => x.Email == email, cancellationToken);
     }
 
-    public async Task SaveChangesAsync(CancellationToken cancellationToken)
+    public async Task<bool> SaveChangesAsync(CancellationToken cancellationToken)
     {
-        await context.SaveChangesAsync(cancellationToken);
+        return await context.SaveChangesAsync(cancellationToken) > 0;
     }
 }

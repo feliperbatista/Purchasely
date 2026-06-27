@@ -15,5 +15,8 @@ public class UpdateProductCommandValidator : AbstractValidator<UpdateProductComm
 
         RuleFor(x => x.Description)
             .MaximumLength(500).WithMessage("The maximum length for this field is 500 characters");
+
+        RuleFor(x => x.Category)
+            .MaximumLength(100).WithMessage("The maximum length for this field is 100 characters");
     }
 }

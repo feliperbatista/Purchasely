@@ -22,15 +22,7 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
         builder.Property(x => x.Description)
             .HasMaxLength(500);
 
-        builder.Property(x => x.UnitPrice)
-            .HasPrecision(18, 2);
-
-        builder.HasOne(x => x.Supplier)
-            .WithMany(s => s.Products)
-            .HasForeignKey(x => x.SupplierId)
-            .OnDelete(DeleteBehavior.Restrict);
-
-        builder.HasIndex(x => new { x.SupplierId, x.SKU })
-            .IsUnique();
+        builder.Property(x => x.Category)
+            .HasMaxLength(100);
     }
 }

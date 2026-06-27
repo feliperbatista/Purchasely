@@ -25,8 +25,8 @@ public class UpdateSupplierCommandHandler(
 
         supplier.Update(request.Name, request.Email, request.Phone, request.Address, request.TaxNumber);
         
-        await repository.SaveChangesAsync(cancellationToken);
+        bool saved = await repository.SaveChangesAsync(cancellationToken);
         
-        return Result<Unit>.Success(Unit.Value);
+        return saved ? Result<Unit>.Success(Unit.Value) : Result<Unit>.Failure(400, "Failed saving in database");;
     }
 }

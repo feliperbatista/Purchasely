@@ -1,4 +1,3 @@
-using AutoMapper;
 using MediatR;
 using Purchasely.Application.Common;
 using Purchasely.Application.DTOs;
@@ -9,8 +8,7 @@ namespace Purchasely.Application.Features.Suppliers.Queries;
 public record GetSupplierByIdQuery(Guid Id) : IRequest<Result<SupplierDetailsResponse>>;
 
 public class GetSupplierByIdQueryHandler(
-    ISupplierRepository repository,
-    IMapper mapper
+    ISupplierRepository repository
 ) : IRequestHandler<GetSupplierByIdQuery, Result<SupplierDetailsResponse>>
 {
     public async Task<Result<SupplierDetailsResponse>> Handle(GetSupplierByIdQuery request, CancellationToken cancellationToken)
@@ -20,6 +18,21 @@ public class GetSupplierByIdQueryHandler(
         if (supplier is null)
             return Result<SupplierDetailsResponse>.Failure(404, "Supplier not found");
 
-        return Result<SupplierDetailsResponse>.Success(mapper.Map<SupplierDetailsResponse>(supplier));
+        return Result<SupplierDetailsResponse>.Success(new SupplierDetailsResponse
+        (
+            supplier.Id,
+            supplier.Name,
+            supplier.Email,
+            supplier.Phone,
+            supplier.TaxNumber,
+            supplier.Address,
+            supplier.IsActive,
+            supplier.CreatedAt,
+            supplier.Products.Select(sp => new SupplierProducts(
+                sp.Product.SKU,
+                sp.Product.Name,
+                sp.Product.Description,
+                sp.Product.Category
+            ))));
     }
 }

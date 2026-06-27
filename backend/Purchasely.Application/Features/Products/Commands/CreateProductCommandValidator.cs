@@ -16,7 +16,7 @@ public class CreateProductCommandValidator : AbstractValidator<CreateProductComm
         RuleFor(x => x.Description)
             .MaximumLength(500).WithMessage("The maximum length for this field is 500 characters");
 
-        RuleFor(x => x.SupplierId)
-            .NotEmpty().WithMessage("Supplier ID is required");
+        RuleFor(x => x.Description)
+            .MaximumLength(100).WithMessage("The maximum length for this field is 100 characters");
     }
 }

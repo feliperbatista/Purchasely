@@ -20,6 +20,10 @@ public static class InfrastructureServiceExtension
         services.AddScoped<ISupplierRepository, SupplierRepository>();
         services.AddScoped<IProductRepository, ProductRepository>();
         services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<ISupplierProductRepository, SupplierProductRepository>();
         services.AddScoped<IJwtService, JwtService>();
+        services.AddScoped<IRequisitionRepository, RequisitionRepository>();
+        services.AddScoped<IAuditLogRepository, AuditLogRepository>();
+        services.AddScoped<INotificationRepository, NotificationRepository>();
     }
 }

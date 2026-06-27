@@ -66,4 +66,26 @@ public class SuppliersController(IMediator mediator) : ControllerBase
 
         return NoContent();
     }
+
+    [HttpPost("{id}/products")]
+    public async Task<IActionResult> CreateProduct([FromRoute] Guid id, [FromBody] CreateSupplierProductRequest request, CancellationToken cancellationToken)
+    {
+        var command = new CreateSupplierProductCommand(id, request.ProductId, request.UnitPrice);
+
+        var result = await mediator.Send(command, cancellationToken);
+        if (!result.IsSuccess)
+            return StatusCode(result.StatusCode, result.Errors);
+
+        return Created("", result.Value);
+    }
+
+    [HttpDelete("{supplierId}/products/{productId}")]
+    public async Task<IActionResult> DeleteProduct([FromRoute] Guid supplierId, [FromRoute] Guid productId, CancellationToken cancellationToken)
+    {
+        var result = await mediator.Send(new DeleteSupplierProductCommand(supplierId, productId), cancellationToken);
+        if (!result.IsSuccess)
+            return StatusCode(result.StatusCode, result.Errors);
+
+        return NoContent();
+    }
 }

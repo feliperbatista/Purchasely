@@ -2,7 +2,9 @@ using System.Text;
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using Purchasely.API.Services;
 using Purchasely.Application.Extensions;
+using Purchasely.Application.Interfaces;
 using Purchasely.Infrastructure.Authentication;
 using Purchasely.Infrastructure.Extensions;
 using Scalar.AspNetCore;
@@ -10,8 +12,11 @@ using Scalar.AspNetCore;
 var builder = WebApplication.CreateBuilder(args);
 var config = builder.Configuration;
 
+builder.Services.AddHttpContextAccessor();
+
 builder.Services.AddInfrastructure(config);
 builder.Services.AddApplication();
+builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 builder.Services.Configure<JwtSettings>(config.GetSection("Jwt"));
 
 builder.Services

@@ -1,4 +1,3 @@
-using AutoMapper;
 using MediatR;
 using Purchasely.Application.Common;
 using Purchasely.Application.DTOs;
@@ -16,8 +15,7 @@ public record CreateSupplierCommand(
 ) : IRequest<Result<SupplierDetailsResponse>>;
 
 public class CreateSupplierCommandHandler(
-    ISupplierRepository repository,
-    IMapper mapper
+    ISupplierRepository repository
 ) : IRequestHandler<CreateSupplierCommand, Result<SupplierDetailsResponse>>
 {
     public async Task<Result<SupplierDetailsResponse>> Handle(CreateSupplierCommand request, CancellationToken cancellationToken)
@@ -29,8 +27,20 @@ public class CreateSupplierCommandHandler(
         var supplier = Supplier.Create(request.Name, request.Email, request.Phone, request.Address, request.TaxNumber);
         
         await repository.AddAsync(supplier, cancellationToken);
-        await repository.SaveChangesAsync(cancellationToken);
+        bool saved = await repository.SaveChangesAsync(cancellationToken);
 
-        return Result<SupplierDetailsResponse>.Success(mapper.Map<SupplierDetailsResponse>(supplier));
+        return saved
+            ? Result<SupplierDetailsResponse>.Success(new SupplierDetailsResponse(
+                supplier.Id,
+                supplier.Name,
+                supplier.Email,
+                supplier.Phone,
+                supplier.TaxNumber,
+                supplier.Address,
+                supplier.IsActive,
+                supplier.CreatedAt,
+                Products: []
+              ))
+            : Result<SupplierDetailsResponse>.Failure(400, "Failed saving in database");
     }
 }

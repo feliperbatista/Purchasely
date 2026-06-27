@@ -1,4 +1,3 @@
-using AutoMapper;
 using MediatR;
 using Purchasely.Application.Common;
 using Purchasely.Application.DTOs;
@@ -13,8 +12,7 @@ public record LoginCommand(
 
 public class LoginCommandHandler(
     IUserRepository repository,
-    IJwtService jwtService,
-    IMapper mapper) : IRequestHandler<LoginCommand, Result<LoginResponse>>
+    IJwtService jwtService) : IRequestHandler<LoginCommand, Result<LoginResponse>>
 {
     public async Task<Result<LoginResponse>> Handle(LoginCommand request, CancellationToken cancellationToken)
     {
@@ -30,6 +28,6 @@ public class LoginCommandHandler(
 
         var token = jwtService.GenerateToken(user);
 
-        return Result<LoginResponse>.Success(new LoginResponse(token, mapper.Map<UserResponse>(user)));
+        return Result<LoginResponse>.Success(new LoginResponse(token, new UserResponse(user.Id, user.Name, user.Email, user.Role)));
     }
 }

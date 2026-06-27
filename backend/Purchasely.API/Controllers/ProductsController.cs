@@ -46,7 +46,7 @@ public class ProductsController(IMediator mediator) : ControllerBase
     [HttpPut("{id}")]
     public async Task<IActionResult> Update(Guid id, [FromBody] UpdateProductRequest request, CancellationToken cancellationToken)
     {
-        var command = new UpdateProductCommand(id, request.SKU, request.Name, request.UnitPrice, request.Description);
+        var command = new UpdateProductCommand(id, request.SKU, request.Name, request.Description, request.Category);
 
         var result = await mediator.Send(command, cancellationToken);
 

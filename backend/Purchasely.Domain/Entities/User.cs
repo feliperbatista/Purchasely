@@ -10,6 +10,7 @@ public class User
     public required string PasswordHash { get; set; }
     public UserRole Role { get; set; }
     public DateTime CreatedAt { get; set; }
+    public ICollection<Requisition> Requisitions = [];
 
     private User() {}
 

@@ -1,4 +1,3 @@
-using AutoMapper;
 using MediatR;
 using Purchasely.Application.Common;
 using Purchasely.Application.DTOs;
@@ -16,8 +15,7 @@ public record CreateUserCommand(
 ) : IRequest<Result<UserResponse>>;
 
 public class CreateUserCommandHandler(
-    IUserRepository repository,
-    IMapper mapper
+    IUserRepository repository
 ) : IRequestHandler<CreateUserCommand, Result<UserResponse>>
 {
     public async Task<Result<UserResponse>> Handle(CreateUserCommand request, CancellationToken cancellationToken)
@@ -31,8 +29,10 @@ public class CreateUserCommandHandler(
         var user = User.Create(request.Name, request.Email, hash, request.Role);
         
         await repository.AddAsync(user, cancellationToken);
-        await repository.SaveChangesAsync(cancellationToken);
+        bool saved = await repository.SaveChangesAsync(cancellationToken);
 
-        return Result<UserResponse>.Success(mapper.Map<UserResponse>(user));
+        return saved 
+            ? Result<UserResponse>.Success(new UserResponse(user.Id, user.Name, user.Email, user.Role))
+            : Result<UserResponse>.Failure(400, "Failed saving in database");
     }
 }

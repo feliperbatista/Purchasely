@@ -28,6 +28,7 @@ public class GetRequisitionsQueryHandler(
                     l.Product.Name,
                     l.QuantityRequested,
                     l.EstimatedUnitPrice
-                ))))]);
+                )), 
+                null))]);
     }
 }

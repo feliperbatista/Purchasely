@@ -13,7 +13,8 @@ public class Requisition
     public DateTime CreatedAt { get; set; }
     public required Guid RequesterId { get; set; }
     public User Requester { get; set; } = null!;
-    public ICollection<RequisitionLine> Lines = new List<RequisitionLine>();
+    public ICollection<RequisitionLine> Lines { get; set; } = [];
+    public ICollection<Approval> Approvals { get; set; } = [];
 
     private Requisition() {}
 
@@ -36,12 +37,27 @@ public class Requisition
         };
     }
 
-    public void ChangeStatus(RequisitionStatus status)
+    public void Approve(Guid approverId)
     {
-        Status = status;
+        Status = RequisitionStatus.Approved;
+        Approvals.Add(Approval.Create(Id, approverId));
+    }
 
-        if (status == RequisitionStatus.Submitted)
-            SubmittedAt = DateTime.UtcNow;
+    public void RemoveApproval(Approval approval)
+    {
+        Status = RequisitionStatus.Submitted;
+        Approvals.Remove(approval);
+    }
+
+    public void Reject()
+    {
+        Status = RequisitionStatus.Rejected;
+    }
+
+    public void Submit()
+    {
+        Status = RequisitionStatus.Submitted;
+        SubmittedAt = DateTime.UtcNow;
     }
 
     public bool CanTransitionTo(RequisitionStatus newStatus)
@@ -72,7 +88,27 @@ public class Requisition
     {
         Priority = priority;
         Justification = justification;
-        ReplaceLines(lines);
+        var toRemove = Lines
+        .Where(x => !lines.Any(n => n.ProductId == x.ProductId))
+        .ToList();
+
+        foreach (var line in toRemove)
+            Lines.Remove(line);
+
+        foreach (var newLine in lines)
+        {
+            var existing = Lines.FirstOrDefault(x => x.ProductId == newLine.ProductId);
+
+            if (existing is null)
+            {
+                Lines.Add(newLine);
+            }
+            else
+            {
+                existing.QuantityRequested = newLine.QuantityRequested;
+                existing.EstimatedUnitPrice = newLine.EstimatedUnitPrice;
+            }
+        }
     }
 
     private void ReplaceLines(IEnumerable<RequisitionLine> lines)

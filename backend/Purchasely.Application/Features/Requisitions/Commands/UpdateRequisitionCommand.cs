@@ -50,7 +50,8 @@ public class UpdateRequisitionCommandHandler(
                 l.ProductId,
                 l.QuantityRequested,
                 l.EstimatedUnitPrice
-            ));
+            ))
+            .ToList();
         requisition.Update(request.Priority, request.Justification, lines);
         var saved = await requisitionRepo.SaveChangesAsync(cancellationToken);
 
@@ -69,6 +70,11 @@ public class UpdateRequisitionCommandHandler(
                     productMap[l.ProductId].Name,
                     l.QuantityRequested,
                     l.EstimatedUnitPrice
+                )),
+                requisition.Approvals.Select(a => new Approvals(
+                    a.Id,
+                    a.Approver.Name,
+                    a.ActionedAt
                 ))))
             : Result<RequisitionResponse>.Failure(400, "Failed saving in database");
     }

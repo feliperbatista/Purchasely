@@ -30,9 +30,7 @@ public class SubmitRequisitionCommandHandler(
             );
         }
 
-        requisition.ChangeStatus(RequisitionStatus.Submitted);
-
-        requisitionRepo.Update(requisition);
+        requisition.Submit();
         var saved = await requisitionRepo.SaveChangesAsync(cancellationToken);
 
         if (!saved)

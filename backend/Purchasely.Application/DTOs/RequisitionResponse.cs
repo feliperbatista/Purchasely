@@ -11,7 +11,8 @@ public record RequisitionResponse(
     DateTime? SubmittedAt,
     DateTime CreatedAt,
     string RequesterName,
-    IEnumerable<RequisitionLines> Lines
+    IEnumerable<RequisitionLines> Lines,
+    IEnumerable<Approvals>? Approvals
 );
 
 public record RequisitionLines(
@@ -19,4 +20,10 @@ public record RequisitionLines(
     string ProductName,
     decimal QuantityRequested,
     decimal EstimatedUnitPrice
+);
+
+public record Approvals(
+    Guid Id,
+    string Approver,
+    DateTime ApprovedAt
 );

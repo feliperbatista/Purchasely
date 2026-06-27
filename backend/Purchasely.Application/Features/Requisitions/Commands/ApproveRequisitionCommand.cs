@@ -2,6 +2,7 @@ using MediatR;
 using Purchasely.Application.Common;
 using Purchasely.Application.Events.Requisitions;
 using Purchasely.Application.Interfaces;
+using Purchasely.Domain.Entities;
 using Purchasely.Domain.Enums;
 
 namespace Purchasely.Application.Features.Requisitions.Commands;
@@ -30,9 +31,12 @@ public class ApproveRequisitionCommandHandler(
             );
         }
 
-        requisition.ChangeStatus(RequisitionStatus.Approved);
+        if (requisition.Approvals.Any(a => a.ApproverId == currentUser.Id))
+            return Result<Unit>.Failure(400, $"You already approved this requisition");
 
-        requisitionRepo.Update(requisition);
+        requisition.Approve(currentUser.Id);
+        await requisitionRepo.AddApprovalAsync(requisition.Approvals.Last(), cancellationToken);
+        
         var saved = await requisitionRepo.SaveChangesAsync(cancellationToken);
 
         if (!saved)
@@ -46,4 +50,4 @@ public class ApproveRequisitionCommandHandler(
 
         return Result<Unit>.Success(Unit.Value);
     }
-}
+};

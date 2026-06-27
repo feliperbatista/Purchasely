@@ -31,6 +31,11 @@ public class GetRequisitionByIdQueryHandler(
                     l.Product.Name,
                     l.QuantityRequested,
                     l.EstimatedUnitPrice
+                )),
+                requisition.Approvals.Select(a => new Approvals(
+                    a.Id,
+                    a.Approver.Name,
+                    a.ActionedAt
                 ))));
     }
 }

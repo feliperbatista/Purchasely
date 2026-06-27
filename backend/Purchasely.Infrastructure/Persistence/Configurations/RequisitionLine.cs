@@ -18,7 +18,7 @@ public class RequisitionLineConfiguration : IEntityTypeConfiguration<Requisition
         builder.HasOne(x => x.Requisition)
             .WithMany(r => r.Lines)
             .HasForeignKey(x => x.RequisitionId)
-            .OnDelete(DeleteBehavior.Restrict);
+            .OnDelete(DeleteBehavior.Cascade);
 
         builder.HasOne(x => x.Product)
             .WithMany()

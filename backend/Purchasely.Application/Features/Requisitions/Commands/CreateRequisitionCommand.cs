@@ -65,7 +65,8 @@ public class CreateRequisitionCommandHandler(
                     productMap[l.ProductId].Name,
                     l.QuantityRequested,
                     l.EstimatedUnitPrice
-                ))))
+                )),
+                null))
             : Result<RequisitionResponse>.Failure(400, "Failed saving in database");
     }
 }

@@ -69,9 +69,7 @@ public class RequisitionController(IMediator mediator) : ControllerBase
     [HttpPost("{id:guid}/submit")]
     public async Task<IActionResult> Submit([FromRoute] Guid id, CancellationToken cancellationToken)
     {
-        var command = new SubmitRequisitionCommand(id);
-
-        var result = await mediator.Send(command, cancellationToken);
+        var result = await mediator.Send(new SubmitRequisitionCommand(id), cancellationToken);
 
         return result.IsSuccess ? NoContent() : StatusCode(result.StatusCode, result.Errors);
     }
@@ -80,12 +78,20 @@ public class RequisitionController(IMediator mediator) : ControllerBase
     [HttpPost("{id:guid}/approve")]
     public async Task<IActionResult> Approve([FromRoute] Guid id, CancellationToken cancellationToken)
     {
-        var command = new ApproveRequisitionCommand(id);
-
-        var result = await mediator.Send(command, cancellationToken);
+        var result = await mediator.Send(new ApproveRequisitionCommand(id), cancellationToken);
 
         return result.IsSuccess ? NoContent() : StatusCode(result.StatusCode, result.Errors);
     }
+
+    [Authorize(Roles = "Manager,Admin")]
+    [HttpPost("{id:guid}/remove-approval")]
+    public async Task<IActionResult> RemoveApproval([FromRoute] Guid id, CancellationToken cancellationToken)
+    {
+        var result = await mediator.Send(new RemoveApprovalRequisitionCommand(id), cancellationToken);
+
+        return result.IsSuccess ? NoContent() : StatusCode(result.StatusCode, result.Errors);
+    }
+
 
     [Authorize(Roles = "Manager,Admin")]
     [HttpPost("{id:guid}/reject")]

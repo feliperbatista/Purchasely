@@ -31,6 +31,7 @@ public class GetSupplierByIdQueryHandler(
             supplier.Products.Select(sp => new SupplierProducts(
                 sp.Product.SKU,
                 sp.Product.Name,
+                sp.UnitPrice,
                 sp.Product.Description,
                 sp.Product.Category
             ))));

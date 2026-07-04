@@ -15,6 +15,7 @@ public record SupplierDetailsResponse(
 public record SupplierProducts(
     string SKU,
     string Name,
+    decimal UnitPrice,
     string? Description,
     string? Category
 );

@@ -8,13 +8,14 @@ public class PurchaseOrder
     public int Number { get; set; }
     public Guid SupplierId { get; set;}
     public Supplier Supplier { get; set; } = null!;
-    public Guid RequisitionId { get; set;}
+    public Guid RequisitionId { get; set; }
     public Requisition Requisition { get; set; } = null!;
     public Guid CreatedBy { get; set;}
     public User Creator { get; set; } = null!;
     public decimal SubTotal { get; set; }
     public decimal TaxAmount { get; set; }
     public decimal TotalAmount { get; set; }
+    public string? CancellationReason { get; set; }
     public PurchaseOrderStatus Status { get; set; } = PurchaseOrderStatus.Draft;
     public DateTime CreatedAt { get; set; }
     public DateTime? IssuedAt { get; set; }
@@ -76,9 +77,10 @@ public class PurchaseOrder
         Status = PurchaseOrderStatus.Closed;
     }
 
-    public void Cancel()
+    public void Cancel(string reason)
     {
         Status = PurchaseOrderStatus.Cancelled;
+        CancellationReason = reason;
     }
 
     public bool CanTransitionTo(PurchaseOrderStatus newStatus)

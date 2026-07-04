@@ -91,7 +91,7 @@ public class PurchaseOrdersController(IMediator mediator) : ControllerBase
     [HttpPost("{id:guid}/cancel")]
     public async Task<IActionResult> Cancel([FromRoute] Guid id, [FromBody] RejectRequisitionRequest request, CancellationToken cancellationToken)
     {
-        var result = await mediator.Send(new CancelPurchaseOrderCommand(id), cancellationToken);
+        var result = await mediator.Send(new CancelPurchaseOrderCommand(id, request.Reason), cancellationToken);
 
         return result.IsSuccess ? NoContent() : StatusCode(result.StatusCode, result.Errors);
     }

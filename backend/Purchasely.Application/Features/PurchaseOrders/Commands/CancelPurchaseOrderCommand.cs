@@ -7,7 +7,8 @@ using Purchasely.Domain.Enums;
 namespace Purchasely.Application.Features.PurchaseOrders.Commands;
 
 public record CancelPurchaseOrderCommand(
-    Guid Id
+    Guid Id,
+    string Reason
 ) : IRequest<Result<Unit>>;
 
 public class CancelPurchaseOrderCommandHandler(
@@ -30,7 +31,7 @@ public class CancelPurchaseOrderCommandHandler(
             );
         }
 
-        purchaseOrder.Cancel();
+        purchaseOrder.Cancel(request.Reason);
         
         var saved = await purchaseOrderRepo.SaveChangesAsync(cancellationToken);
 

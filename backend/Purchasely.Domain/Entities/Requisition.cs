@@ -27,7 +27,6 @@ public class Requisition
     {
         return new Requisition
         {
-            Id = Guid.NewGuid(),
             Status = status,
             Priority = priority,
             Justification = justification,

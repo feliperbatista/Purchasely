@@ -18,7 +18,6 @@ public class User
     {
         return new User
         {
-            Id = Guid.NewGuid(),
             Name = name,
             Email = email,
             PasswordHash = passwordHash,

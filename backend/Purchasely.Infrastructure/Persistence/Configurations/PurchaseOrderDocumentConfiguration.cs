@@ -12,9 +12,6 @@ public class PurchaseOrderDocumentConfiguration : IEntityTypeConfiguration<Purch
 
         builder.HasKey(x => x.Id);
 
-        builder.Property(x => x.Id)
-            .ValueGeneratedOnAdd();
-
         builder.Property(x => x.FileName).HasMaxLength(255).IsRequired();
         builder.Property(x => x.ContentType).HasMaxLength(100).IsRequired();
         builder.Property(x => x.BlobUrl).HasMaxLength(1000).IsRequired();

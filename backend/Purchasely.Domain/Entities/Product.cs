@@ -15,7 +15,6 @@ public class Product
     {
         return new Product
         {
-            Id = Guid.NewGuid(),
             SKU = sku,
             Name = name,
             Description = description,

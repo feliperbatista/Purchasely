@@ -17,7 +17,6 @@ public class PurchaseOrderLine
     {
         return new PurchaseOrderLine
         {
-            Id = Guid.NewGuid(),
             ProductId = productId,
             QuantityOrdered = quantityOrdered,
             UnitPrice = unitPrice

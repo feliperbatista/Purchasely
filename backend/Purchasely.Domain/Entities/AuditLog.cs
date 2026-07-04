@@ -16,7 +16,6 @@ public class AuditLog
     {
         return new AuditLog
         {
-            Id = Guid.NewGuid(),
             EntityType = entityType,
             EntityId = entityId,
             Action = action,

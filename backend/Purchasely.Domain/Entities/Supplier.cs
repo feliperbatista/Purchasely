@@ -18,7 +18,6 @@ public class Supplier
     {
         return new Supplier
         {
-            Id = Guid.NewGuid(),
             Name = name,
             Email = email,
             Phone = phone,

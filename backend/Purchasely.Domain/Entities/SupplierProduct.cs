@@ -15,7 +15,6 @@ public class SupplierProduct
     {
         return new SupplierProduct
         {
-            Id = Guid.NewGuid(),
             SupplierId = supplierId,
             ProductId = productId,
             UnitPrice = unitPrice

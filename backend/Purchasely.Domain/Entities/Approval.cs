@@ -15,7 +15,6 @@ public class Approval
     {
         return new Approval
         {
-            Id = Guid.NewGuid(),
             RequisitionId = requisitionId,
             ApproverId = approverId,
             ActionedAt = DateTime.UtcNow

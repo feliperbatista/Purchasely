@@ -35,7 +35,6 @@ public class PurchaseOrder
 
         return new PurchaseOrder
         {
-            Id = Guid.NewGuid(),
             SupplierId = supplierId,
             RequisitionId = requisitionId,
             CreatedBy = createdBy,

@@ -1,25 +1,22 @@
 using MediatR;
 using Purchasely.Application.Events.Requisitions;
 using Purchasely.Application.Interfaces;
-using Purchasely.Domain.Entities;
+using Purchasely.Application.Messages.Emails;
 
 namespace Purchasely.Application.EventHandlers.Requisitions;
 
-public class CreateAuditLogOnRequisitionSubmitted(
-    IAuditLogRepository auditRepo
+public class SendEmailOnRequisitionSubmitted(
+    IBus bus
 ) : INotificationHandler<RequisitionSubmittedEvent>
 {
     public async Task Handle(RequisitionSubmittedEvent notification, CancellationToken cancellationToken)
     {
-        var log = AuditLog.Create(
-            "Requisition",
+        await bus.PublishAsync(new RequisitionSubmittedEmailMessage(
             notification.RequisitionId,
-            "Submitted",
-            notification.RequesterId,
+            notification.RequisitionNumber,
+            notification.RequesterName,
+            notification.ApproverEmails,
             notification.SubmittedAt
-        );
-
-        await auditRepo.AddAsync(log, cancellationToken);
-        await auditRepo.SaveChangesAsync(cancellationToken);
+        ), cancellationToken);
     }
 }

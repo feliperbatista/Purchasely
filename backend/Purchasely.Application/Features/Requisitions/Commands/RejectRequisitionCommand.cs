@@ -44,7 +44,10 @@ public class RejectRequisitionCommandHandler(
             request.Id,
             currentUser.Id,
             request.Reason,
-            DateTime.UtcNow
+            DateTime.UtcNow,
+            requisition.Requester.Email,
+            requisition.Requester.Name,
+            requisition.Number
         ), cancellationToken);
 
         return Result<Unit>.Success(Unit.Value);

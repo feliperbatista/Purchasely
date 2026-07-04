@@ -6,6 +6,9 @@ public record RequisitionRejectedEvent(
     Guid RequisitionId,
     Guid RejectedById,
     string Reason,
-    DateTime RejectedAt
+    DateTime RejectedAt,
+    string RequesterEmail,
+    string RequesterName,
+    int RequisitionNumber
 ) : INotification;
 

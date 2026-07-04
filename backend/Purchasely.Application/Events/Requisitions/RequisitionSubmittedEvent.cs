@@ -4,6 +4,9 @@ namespace Purchasely.Application.Events.Requisitions;
 
 public record RequisitionSubmittedEvent(
     Guid RequisitionId,
-    Guid SubmittedById,
-    DateTime SubmittedAt
+    Guid RequesterId,
+    DateTime SubmittedAt,
+    string RequesterName,
+    int RequisitionNumber,
+    List<string> ApproverEmails
 ) : INotification;

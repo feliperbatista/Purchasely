@@ -39,7 +39,10 @@ public class SubmitRequisitionCommandHandler(
         await mediator.Publish(new RequisitionSubmittedEvent(
             request.Id,
             currentUser.Id,
-            DateTime.UtcNow
+            DateTime.UtcNow,
+            currentUser.Name,
+            requisition.Number,
+            ["felipe@gmail.com"]
         ), cancellationToken);
 
         return Result<Unit>.Success(Unit.Value);

@@ -5,6 +5,10 @@ namespace Purchasely.Application.Events.PurchaseOrders;
 public record PurchaseOrderIssuedEvent(
     Guid PurchaseOrderId,
     Guid IssuerId,
-    DateTime IssuedAt
+    DateTime IssuedAt,
+    int PurchaseOrderNumber,
+    string SupplierEmail,
+    string SupplierName,
+    decimal TotalAmount
 ) : INotification;
 

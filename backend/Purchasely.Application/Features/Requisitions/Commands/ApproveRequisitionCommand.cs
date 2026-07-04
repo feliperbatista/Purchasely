@@ -44,7 +44,11 @@ public class ApproveRequisitionCommandHandler(
         await mediator.Publish(new RequisitionApprovedEvent(
             request.Id,
             currentUser.Id,
-            DateTime.UtcNow
+            DateTime.UtcNow,
+            requisition.Number,
+            requisition.Requester.Email,
+            requisition.Requester.Name,
+            currentUser.Name
         ), cancellationToken);
 
         return Result<Unit>.Success(Unit.Value);

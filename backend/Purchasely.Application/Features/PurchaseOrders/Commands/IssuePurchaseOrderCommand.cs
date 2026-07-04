@@ -40,7 +40,11 @@ public class IssuePurchaseOrderCommandHandler(
         await mediator.Publish(new PurchaseOrderIssuedEvent(
             request.Id,
             currentUser.Id,
-            DateTime.UtcNow
+            DateTime.UtcNow,
+            purchaseOrder.Number,
+            purchaseOrder.Supplier.Email,
+            purchaseOrder.Supplier.Name,
+            purchaseOrder.TotalAmount
         ), cancellationToken);
 
         return Result<Unit>.Success(Unit.Value);

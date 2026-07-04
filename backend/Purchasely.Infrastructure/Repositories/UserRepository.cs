@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Purchasely.Application.Interfaces;
 using Purchasely.Domain.Entities;
+using Purchasely.Domain.Enums;
 using Purchasely.Infrastructure.Persistence;
 
 namespace Purchasely.Infrastructure.Repositories;
@@ -16,6 +17,14 @@ public class UserRepository(AppDbContext context) : IUserRepository
     {
         return await context.Users
             .FirstOrDefaultAsync(x => x.Email == email, cancellationToken);
+    }
+
+    public async Task<List<User>> GetByRoleAsync(UserRole role, CancellationToken cancellationToken)
+    {
+        return await context.Users
+            .AsNoTracking()
+            .Where(x => x.Role == role)
+            .ToListAsync(cancellationToken);
     }
 
     public async Task<bool> SaveChangesAsync(CancellationToken cancellationToken)

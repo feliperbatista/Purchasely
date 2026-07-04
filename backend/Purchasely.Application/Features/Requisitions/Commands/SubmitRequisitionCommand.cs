@@ -13,7 +13,8 @@ public record SubmitRequisitionCommand(
 public class SubmitRequisitionCommandHandler(
     IRequisitionRepository requisitionRepo,
     IMediator mediator,
-    ICurrentUserService currentUser
+    ICurrentUserService currentUser,
+    IUserRepository userRepository
 ) : IRequestHandler<SubmitRequisitionCommand, Result<Unit>>
 {
     public async Task<Result<Unit>> Handle(SubmitRequisitionCommand request, CancellationToken cancellationToken)
@@ -36,13 +37,16 @@ public class SubmitRequisitionCommandHandler(
         if (!saved)
             return Result<Unit>.Failure(400, "Failed saving in database");
 
+        var approvers = await userRepository.GetByRoleAsync(UserRole.Manager, cancellationToken);
+        var approversEmail = approvers.Select(a => a.Email).ToList();
+
         await mediator.Publish(new RequisitionSubmittedEvent(
             request.Id,
             currentUser.Id,
             DateTime.UtcNow,
             currentUser.Name,
             requisition.Number,
-            ["felipe@gmail.com"]
+            approversEmail
         ), cancellationToken);
 
         return Result<Unit>.Success(Unit.Value);

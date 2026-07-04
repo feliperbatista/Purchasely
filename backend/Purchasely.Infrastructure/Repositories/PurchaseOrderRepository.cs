@@ -30,6 +30,7 @@ public class PurchaseOrderRepository(AppDbContext context) : IPurchaseOrderRepos
                 .ThenInclude(l => l.Product)
             .Include(p => p.Creator)
             .Include(p => p.Supplier)
+            .Include(p => p.Documents)
             .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
     }
 

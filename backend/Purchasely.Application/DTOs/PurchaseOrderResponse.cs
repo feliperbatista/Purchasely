@@ -14,7 +14,8 @@ public record PurchaseOrderResponse(
     decimal TotalAmount,
     DateTime CreatedAt,
     DateTime? IssuedAt,
-    List<PurchaseOrderLineResponse> Lines
+    List<PurchaseOrderLineResponse> Lines,
+    List<PurchaseOrderDocumentsResponse>? Documents
 );
 
 public record PurchaseOrderLineResponse(
@@ -25,4 +26,11 @@ public record PurchaseOrderLineResponse(
     decimal? QuantityReceived,
     decimal UnitPrice,
     decimal LineTotal
+);
+
+public record PurchaseOrderDocumentsResponse(
+    Guid Id,
+    string FileName,
+    string ContentType,
+    string BlobUrl
 );

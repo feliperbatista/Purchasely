@@ -38,6 +38,12 @@ public class GetPurchaseOrderByIdQueryHandler(
                     l.QuantityReceived,
                     l.UnitPrice,
                     l.QuantityOrdered * l.UnitPrice
+                ))],
+                [.. po.Documents.Select(d => new PurchaseOrderDocumentsResponse(
+                    d.Id,
+                    d.FileName,
+                    d.ContentType,
+                    d.BlobUrl
                 ))]
             ));
     }

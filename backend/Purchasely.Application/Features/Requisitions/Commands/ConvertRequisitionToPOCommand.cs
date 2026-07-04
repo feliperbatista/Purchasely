@@ -110,7 +110,8 @@ public class ConvertRequisitionToPOCommandHandler(
                         l.QuantityReceived,
                         l.UnitPrice,
                         l.QuantityOrdered * l.UnitPrice
-                    ))]
+                    ))],
+                    null
                 ))]
             ));
     }

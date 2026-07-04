@@ -23,7 +23,7 @@ public class SupplierProductConfiguration : IEntityTypeConfiguration<SupplierPro
         builder.HasOne(x => x.Supplier)
             .WithMany(s => s.Products)
             .HasForeignKey(x => x.SupplierId)
-            .OnDelete(DeleteBehavior.Restrict);
+            .OnDelete(DeleteBehavior.Cascade);
 
         builder.HasIndex(x => new { x.SupplierId, x.ProductId })
             .IsUnique();

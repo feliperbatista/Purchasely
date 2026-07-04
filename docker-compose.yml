@@ -11,5 +11,16 @@ services:
     volumes:
       - purchasely_pgdata:/var/lib/postgresql/data
 
+  azurite:
+    image: mcr.microsoft.com/azure-storage/azurite
+    ports:
+      - "10000:10000"
+      - "10001:10001"
+      - "10002:10002"
+    command: azurite --blobHost 0.0.0.0 --skipApiVersionCheck
+    volumes:
+      - azurite_data:/data
+
 volumes:
   purchasely_pgdata:
+  azurite_data:

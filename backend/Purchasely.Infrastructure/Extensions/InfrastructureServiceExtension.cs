@@ -26,5 +26,6 @@ public static class InfrastructureServiceExtension
         services.AddScoped<IAuditLogRepository, AuditLogRepository>();
         services.AddScoped<INotificationRepository, NotificationRepository>();
         services.AddScoped<IPurchaseOrderRepository, PurchaseOrderRepository>();
+        services.AddScoped<IFileStorageService, AzureBlobStorageService>();
     }
 }

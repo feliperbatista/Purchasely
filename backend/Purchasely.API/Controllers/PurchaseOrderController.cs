@@ -2,6 +2,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Purchasely.Application.DTOs;
+using Purchasely.Application.Features.PurchaseOrders.Commands;
 using Purchasely.Application.Features.PurchaseOrders.Queries;
 
 namespace Purchasely.API.Controllers;
@@ -23,7 +24,7 @@ public class PurchaseOrdersController(IMediator mediator) : ControllerBase
     }
 
     [HttpGet("{id:guid}")]
-    public async Task<IActionResult> GetById(Guid id, CancellationToken cancellationToken)
+    public async Task<IActionResult> GetById([FromRoute] Guid id, CancellationToken cancellationToken)
     {
         var result = await mediator.Send(new GetPurchaseOrderByIdQuery(id), cancellationToken);
 
@@ -33,38 +34,65 @@ public class PurchaseOrdersController(IMediator mediator) : ControllerBase
         return Ok(result.Value);
     }
 
-    [HttpPost("{id:guid}/submit")]
-    public async Task<IActionResult> Submit([FromRoute] Guid id, CancellationToken cancellationToken)
+    [Authorize(Roles = "Buyer,Admin")]  
+    [HttpPost("{id:guid}/issue")]
+    public async Task<IActionResult> Issue([FromRoute] Guid id, CancellationToken cancellationToken)
     {
-        return NoContent();
-    }
+        var result = await mediator.Send(new IssuePurchaseOrderCommand(id), cancellationToken);
 
-    [Authorize(Roles = "Manager,Admin")]
-    [HttpPost("{id:guid}/approve")]
-    public async Task<IActionResult> Approve([FromRoute] Guid id, CancellationToken cancellationToken)
-    {
-         return NoContent();
-    }
-
-    [Authorize(Roles = "Manager,Admin")]
-    [HttpPost("{id:guid}/remove-approval")]
-    public async Task<IActionResult> RemoveApproval([FromRoute] Guid id, CancellationToken cancellationToken)
-    {
-         return NoContent();
-    }
-
-
-    [Authorize(Roles = "Manager,Admin")]
-    [HttpPost("{id:guid}/reject")]
-    public async Task<IActionResult> Reject([FromRoute] Guid id, [FromBody] RejectRequisitionRequest request, CancellationToken cancellationToken)
-    {
-         return NoContent();
+        return result.IsSuccess ? NoContent() : StatusCode(result.StatusCode, result.Errors);
     }
 
     [Authorize(Roles = "Buyer,Admin")]
-    [HttpPost("{id:guid}/convert-to-po")]
-    public async Task<IActionResult> ConvertToPO([FromRoute] Guid id, CancellationToken cancellationToken)
+    [Consumes("multipart/form-data")]
+    [HttpPost("{id:guid}/receive")]
+    public async Task<IActionResult> Receive(
+        [FromRoute] Guid id,
+        [FromForm] List<PurchaseOrderLinesReceived> lines,
+        [FromForm] List<IFormFile> proofs,
+        CancellationToken cancellationToken)
     {
-         return NoContent();
+        if (proofs is null || proofs.Count == 0)
+            return BadRequest("At least one proof of receipt file is required");
+
+        var allowedTypes = new[] { "application/pdf", "image/png", "image/jpeg" };
+        var invalidFile = proofs.FirstOrDefault(f => !allowedTypes.Contains(f.ContentType));
+        if (invalidFile is not null)
+            return BadRequest($"{invalidFile.FileName} is not allowed file type");
+
+        const long maxSize = 5 * 1024 * 1024;
+        var overSizedFile = proofs.FirstOrDefault(f => f.Length > maxSize);
+        if (invalidFile is not null)
+            return BadRequest($"{invalidFile.FileName} exceeds the 5MB size limit");
+
+        var files = proofs.Select(f => new ReceiptFileDto(
+            f.FileName,
+            f.ContentType,
+            f.Length,
+            f.OpenReadStream()
+        )).ToList();
+
+        var result = await mediator.Send(new ReceivePurchaseOrderCommand(id, lines, files), cancellationToken);
+
+        return result.IsSuccess ? NoContent() : StatusCode(result.StatusCode, result.Errors);
+    }
+
+    [Authorize(Roles = "Buyer,Admin")]
+    [HttpPost("{id:guid}/close")]
+    public async Task<IActionResult> Close([FromRoute] Guid id, CancellationToken cancellationToken)
+    {
+        var result = await mediator.Send(new ClosePurchaseOrderCommand(id), cancellationToken);
+
+        return result.IsSuccess ? NoContent() : StatusCode(result.StatusCode, result.Errors);
+    }
+
+
+    [Authorize(Roles = "Buyer,Admin")]
+    [HttpPost("{id:guid}/cancel")]
+    public async Task<IActionResult> Cancel([FromRoute] Guid id, [FromBody] RejectRequisitionRequest request, CancellationToken cancellationToken)
+    {
+        var result = await mediator.Send(new CancelPurchaseOrderCommand(id), cancellationToken);
+
+        return result.IsSuccess ? NoContent() : StatusCode(result.StatusCode, result.Errors);
     }
 }

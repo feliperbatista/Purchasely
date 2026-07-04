@@ -93,35 +93,6 @@ public class Requisition
     {
         Priority = priority;
         Justification = justification;
-        var toRemove = Lines
-        .Where(x => !lines.Any(n => n.ProductId == x.ProductId))
-        .ToList();
-
-        foreach (var line in toRemove)
-            Lines.Remove(line);
-
-        foreach (var newLine in lines)
-        {
-            var existing = Lines.FirstOrDefault(x => x.ProductId == newLine.ProductId);
-
-            if (existing is null)
-            {
-                Lines.Add(newLine);
-            }
-            else
-            {
-                existing.QuantityRequested = newLine.QuantityRequested;
-                existing.EstimatedUnitPrice = newLine.EstimatedUnitPrice;
-            }
-        }
-    }
-
-    private void ReplaceLines(IEnumerable<RequisitionLine> lines)
-    {
-        Lines.Clear();
-        foreach(var line in lines)
-        {
-            Lines.Add(line);
-        }
+        Lines = [.. lines];
     }
 }

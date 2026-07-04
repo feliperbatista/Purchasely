@@ -31,6 +31,7 @@ public class GetPurchaseOrdersQueryHandler(
                         l.ProductId,
                         l.Product.Name,
                         l.QuantityOrdered,
+                        l.QuantityReceived,
                         l.UnitPrice,
                         l.QuantityOrdered * l.UnitPrice
                     ))]

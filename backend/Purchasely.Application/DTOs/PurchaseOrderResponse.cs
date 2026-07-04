@@ -22,6 +22,7 @@ public record PurchaseOrderLineResponse(
     Guid ProductId,
     string ProductName,
     decimal QuantityOrdered,
+    decimal? QuantityReceived,
     decimal UnitPrice,
     decimal LineTotal
 );

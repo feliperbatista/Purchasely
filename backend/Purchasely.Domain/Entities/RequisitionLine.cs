@@ -16,7 +16,6 @@ public class RequisitionLine
     {
         return new RequisitionLine
         {
-            Id = Guid.NewGuid(),
             ProductId = productId,
             QuantityRequested = quantityRequested,
             EstimatedUnitPrice = estimatedUnitPrice

@@ -2,7 +2,6 @@ using MediatR;
 using Purchasely.Application.Common;
 using Purchasely.Application.Events.Requisitions;
 using Purchasely.Application.Interfaces;
-using Purchasely.Domain.Entities;
 using Purchasely.Domain.Enums;
 
 namespace Purchasely.Application.Features.Requisitions.Commands;

@@ -24,7 +24,7 @@ public class RequisitionController(IMediator mediator) : ControllerBase
     }
 
     [HttpGet("{id:guid}")]
-    public async Task<IActionResult> GetById(Guid id, CancellationToken cancellationToken)
+    public async Task<IActionResult> GetById([FromRoute] Guid id, CancellationToken cancellationToken)
     {
         var result = await mediator.Send(new GetRequisitionByIdQuery(id), cancellationToken);
 

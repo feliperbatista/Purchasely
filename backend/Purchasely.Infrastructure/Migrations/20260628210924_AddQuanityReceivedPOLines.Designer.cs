@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Purchasely.Infrastructure.Persistence;
@@ -11,9 +12,11 @@ using Purchasely.Infrastructure.Persistence;
 namespace Purchasely.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260628210924_AddQuanityReceivedPOLines")]
+    partial class AddQuanityReceivedPOLines
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -192,46 +195,6 @@ namespace Purchasely.Infrastructure.Migrations
                     b.HasIndex("SupplierId");
 
                     b.ToTable("purchase_orders", (string)null);
-                });
-
-            modelBuilder.Entity("Purchasely.Domain.Entities.PurchaseOrderDocument", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("BlobUrl")
-                        .IsRequired()
-                        .HasMaxLength(1000)
-                        .HasColumnType("character varying(1000)");
-
-                    b.Property<string>("ContentType")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
-
-                    b.Property<string>("FileName")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("character varying(255)");
-
-                    b.Property<long>("FileSizeBytes")
-                        .HasColumnType("bigint");
-
-                    b.Property<Guid>("PurchaseOrderId")
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime>("UploadedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("UploadedById")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("PurchaseOrderId");
-
-                    b.ToTable("purchase_order_documents", (string)null);
                 });
 
             modelBuilder.Entity("Purchasely.Domain.Entities.PurchaseOrderLine", b =>
@@ -502,17 +465,6 @@ namespace Purchasely.Infrastructure.Migrations
                     b.Navigation("Supplier");
                 });
 
-            modelBuilder.Entity("Purchasely.Domain.Entities.PurchaseOrderDocument", b =>
-                {
-                    b.HasOne("Purchasely.Domain.Entities.PurchaseOrder", "PurchaseOrder")
-                        .WithMany("Documents")
-                        .HasForeignKey("PurchaseOrderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("PurchaseOrder");
-                });
-
             modelBuilder.Entity("Purchasely.Domain.Entities.PurchaseOrderLine", b =>
                 {
                     b.HasOne("Purchasely.Domain.Entities.Product", "Product")
@@ -583,8 +535,6 @@ namespace Purchasely.Infrastructure.Migrations
 
             modelBuilder.Entity("Purchasely.Domain.Entities.PurchaseOrder", b =>
                 {
-                    b.Navigation("Documents");
-
                     b.Navigation("Lines");
                 });
 

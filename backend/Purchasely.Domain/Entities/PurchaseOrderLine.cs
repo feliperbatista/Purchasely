@@ -8,6 +8,7 @@ public class PurchaseOrderLine
     public Guid PurchaseOrderId { get; set; }
     public PurchaseOrder PurchaseOrder { get; set; } = null!;
     public decimal QuantityOrdered { get; set; }
+    public decimal? QuantityReceived { get; set; }
     public decimal UnitPrice { get; set; }
 
     private PurchaseOrderLine() {}
@@ -21,5 +22,10 @@ public class PurchaseOrderLine
             QuantityOrdered = quantityOrdered,
             UnitPrice = unitPrice
         };
+    }
+
+    public void Receive(decimal quantity)
+    {
+        QuantityReceived = (QuantityReceived ?? 0) + quantity;
     }
 }

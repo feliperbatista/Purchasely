@@ -19,6 +19,7 @@ public class PurchaseOrder
     public DateTime CreatedAt { get; set; }
     public DateTime? IssuedAt { get; set; }
     public ICollection<PurchaseOrderLine> Lines { get; set; } = [];
+    public ICollection<PurchaseOrderDocument> Documents { get; set; } = [];
 
     private PurchaseOrder() {}
 
@@ -53,14 +54,22 @@ public class PurchaseOrder
         IssuedAt = DateTime.UtcNow;
     }
 
-    public void PartiallyReceive()
+    public void RecordReceipt(List<(Guid LineId, decimal Quantity)> receivedLines)
     {
-        Status = PurchaseOrderStatus.PartiallyReceived;
+        foreach (var (lineId, quantity) in receivedLines)
+        {
+            var line = Lines.First(l => l.Id == lineId);
+            line.Receive(quantity);
+        }
+
+        bool allFulfilled = Lines.All(l => l.QuantityReceived >= l.QuantityOrdered);
+        Status = allFulfilled ? PurchaseOrderStatus.Received : PurchaseOrderStatus.PartiallyReceived;
     }
 
-    public void Receive()
+    public void AddDocument(string fileName, string contentType, string blobUrl, long fileSizeBytes, Guid uploadedById)
     {
-        Status = PurchaseOrderStatus.Received;
+        var document = PurchaseOrderDocument.Create(fileName, contentType, blobUrl, fileSizeBytes, uploadedById);
+        Documents.Add(document);
     }
 
     public void Close()

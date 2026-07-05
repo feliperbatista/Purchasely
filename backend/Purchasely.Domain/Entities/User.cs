@@ -11,6 +11,8 @@ public class User
     public UserRole Role { get; set; }
     public DateTime CreatedAt { get; set; }
     public ICollection<Requisition> Requisitions = [];
+    public string? RefreshToken { get; set; }
+    public DateTime? RefreshTokenExpiresAt { get; set; }
 
     private User() {}
 
@@ -25,4 +27,21 @@ public class User
             CreatedAt = DateTime.UtcNow
         };
     }
+
+    public void SetRefreshToken(string token, int expiryDays = 7)
+    {
+        RefreshToken = token;
+        RefreshTokenExpiresAt = DateTime.UtcNow.AddDays(expiryDays);
+    }
+
+    public void RevokeRefreshToken()
+    {
+        RefreshToken = null;
+        RefreshTokenExpiresAt = null;
+    }
+
+    public bool IsRefreshTokenActive() =>
+        RefreshToken is not null &&
+        RefreshTokenExpiresAt.HasValue &&
+        DateTime.UtcNow < RefreshTokenExpiresAt;
 }

@@ -1,3 +1,4 @@
+using System.Security.Cryptography;
 using MediatR;
 using Purchasely.Application.Common;
 using Purchasely.Application.DTOs;
@@ -27,7 +28,11 @@ public class LoginCommandHandler(
             return Result<LoginResponse>.Failure(401, "Invalid credentials");
 
         var token = jwtService.GenerateToken(user);
+        var refreshToken = Convert.ToBase64String(RandomNumberGenerator.GetBytes(64));
 
-        return Result<LoginResponse>.Success(new LoginResponse(token, new UserResponse(user.Id, user.Name, user.Email, user.Role)));
+        user.SetRefreshToken(refreshToken);
+        await repository.SaveChangesAsync(cancellationToken);
+
+        return Result<LoginResponse>.Success(new LoginResponse(new TokensResponse(token, refreshToken), new UserResponse(user.Id, user.Name, user.Email, user.Role)));
     }
 }

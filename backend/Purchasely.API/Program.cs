@@ -43,6 +43,15 @@ builder.Services
                 Encoding.UTF8.GetBytes(config["Jwt:Secret"]!)
             )
         };
+
+        options.Events = new JwtBearerEvents
+        {
+            OnMessageReceived = context =>
+            {
+                context.Token = context.Request.Cookies["auth"];
+                return Task.CompletedTask;
+            }
+        };
     });
 
 

@@ -7,20 +7,15 @@ namespace Purchasely.Application.EventHandlers.Requisitions;
 
 public class NotifyOnRequisitionSubmitted(
     INotificationRepository notificationRepo,
-    IRequisitionRepository requisitionRepo,
     INotificationService notificationService
 ) : INotificationHandler<RequisitionSubmittedEvent>
 {
     public async Task Handle(RequisitionSubmittedEvent notification, CancellationToken cancellationToken)
     {
-        var requisition = await requisitionRepo.GetByIdAsync(notification.RequisitionId, cancellationToken);
-        if (requisition is null)
-            return;
-
         var newNotification = Notification.Create(
-            requisition.RequesterId,
+            notification.RequesterId,
             "Requisition Submitted",
-            $"Requisition #{requisition.Number} was submitted");
+            $"Requisition #{notification.RequisitionNumber} was submitted");
 
         await notificationRepo.AddAsync(newNotification, cancellationToken);
 

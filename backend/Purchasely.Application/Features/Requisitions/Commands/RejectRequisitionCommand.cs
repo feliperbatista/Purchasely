@@ -42,6 +42,7 @@ public class RejectRequisitionCommandHandler(
 
         await mediator.Publish(new RequisitionRejectedEvent(
             request.Id,
+            requisition.RequesterId,
             currentUser.Id,
             request.Reason,
             DateTime.UtcNow,

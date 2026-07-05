@@ -82,8 +82,10 @@ public class ReceivePurchaseOrderCommandHandler(
 
         await mediator.Publish(new PurchaseOrderReceivedEvent(
             request.Id,
+            purchaseOrder.CreatedBy,
             currentUser.Id,
-            DateTime.UtcNow
+            DateTime.UtcNow,
+            purchaseOrder.Number
         ), cancellationToken);
 
         return Result<Unit>.Success(Unit.Value);

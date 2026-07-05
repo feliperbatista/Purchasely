@@ -4,6 +4,7 @@ namespace Purchasely.Application.Events.Requisitions;
 
 public record RequisitionApprovedEvent(
     Guid RequisitionId,
+    Guid RequesterId,
     Guid ApprovedById,
     DateTime ApprovedAt,
     int RequisitionNumber,

@@ -7,27 +7,22 @@ namespace Purchasely.Application.EventHandlers.PurchaseOrders;
 
 public class NotifyOnPOReceived(
     INotificationRepository notificationRepo,
-    IPurchaseOrderRepository purchaseOrderRepo,
     INotificationService notificationService
 ) : INotificationHandler<PurchaseOrderReceivedEvent>
 {
     public async Task Handle(PurchaseOrderReceivedEvent notification, CancellationToken cancellationToken)
     {
-        var po = await purchaseOrderRepo.GetByIdAsync(notification.PurchaseOrderId, cancellationToken);
-        if (po is null)
-            return;
-
-        var newNotification = Notification.Create(po.CreatedBy, "Purchase Order Received", $"Requisition #{po.Number} was received.");
+        var newNotification = Notification.Create(notification.CreatedBy, "Purchase Order Received", $"Requisition #{notification.PoNumber} was received.");
 
         await notificationRepo.AddAsync(newNotification, cancellationToken);
 
         await notificationRepo.SaveChangesAsync(cancellationToken);
 
         await notificationService.SendToUsersAsync(
-            [notification.ReceiverId, po.CreatedBy],
+            [notification.ReceiverId, notification.CreatedBy],
             new NotificationPayload(
                 Title: "Purchase Order Received",
-                Message: $"Purchase Order {po.Number} has been received.",
+                Message: $"Purchase Order {notification.PoNumber} has been received.",
                 Type: "success",
                 EntityId: notification.PurchaseOrderId,
                 EntityType: "PurchaseOrder"

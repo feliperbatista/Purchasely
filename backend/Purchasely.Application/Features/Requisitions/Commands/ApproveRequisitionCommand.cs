@@ -43,6 +43,7 @@ public class ApproveRequisitionCommandHandler(
 
         await mediator.Publish(new RequisitionApprovedEvent(
             request.Id,
+            requisition.RequesterId,
             currentUser.Id,
             DateTime.UtcNow,
             requisition.Number,

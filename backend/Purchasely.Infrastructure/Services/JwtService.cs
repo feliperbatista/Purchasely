@@ -29,7 +29,7 @@ public class JwtService(IOptions<JwtSettings> settings) : IJwtService
             issuer: settings.Value.Issuer,
             audience: settings.Value.Audience,
             claims: claims,
-            expires: DateTime.UtcNow.AddHours(8),
+            expires: DateTime.UtcNow.AddMinutes(settings.Value.ExpiryMinutes),
             signingCredentials: credentials
         );
 

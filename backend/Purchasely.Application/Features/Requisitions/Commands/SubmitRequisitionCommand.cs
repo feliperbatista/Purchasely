@@ -39,6 +39,7 @@ public class SubmitRequisitionCommandHandler(
 
         var approvers = await userRepository.GetByRoleAsync(UserRole.Manager, cancellationToken);
         var approversEmail = approvers.Select(a => a.Email).ToList();
+        var approversId = approvers.Select(a => a.Id).ToList();
 
         await mediator.Publish(new RequisitionSubmittedEvent(
             request.Id,
@@ -46,7 +47,8 @@ public class SubmitRequisitionCommandHandler(
             DateTime.UtcNow,
             currentUser.Name,
             requisition.Number,
-            approversEmail
+            approversEmail,
+            approversId
         ), cancellationToken);
 
         return Result<Unit>.Success(Unit.Value);

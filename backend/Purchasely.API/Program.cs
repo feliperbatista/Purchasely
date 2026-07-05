@@ -2,6 +2,7 @@ using System.Text;
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using Purchasely.API.Hubs;
 using Purchasely.API.Middleware;
 using Purchasely.API.Services;
 using Purchasely.Application.Extensions;
@@ -21,6 +22,8 @@ builder.Services.AddInfrastructure(config);
 builder.Services.AddApplication();
 builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 builder.Services.Configure<JwtSettings>(config.GetSection("Jwt"));
+builder.Services.AddSignalR();
+builder.Services.AddScoped<INotificationService, SignalRNotificationService>();
 
 builder.Services
     .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -67,5 +70,7 @@ app.UseExceptionHandler();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
+
+app.MapHub<NotificationHub>("/hubs/notifications");
 
 app.Run();

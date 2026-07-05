@@ -5,9 +5,10 @@ using Purchasely.Domain.Entities;
 
 namespace Purchasely.Application.EventHandlers.Requisitions;
 
-public class NotifyRequesterOnRequisitionRejected(
+public class NotifyOnRequisitionRejected(
     INotificationRepository notificationRepo,
-    IRequisitionRepository requisitionRepo
+    IRequisitionRepository requisitionRepo,
+    INotificationService notificationService
 ) : INotificationHandler<RequisitionRejectedEvent>
 {
     public async Task Handle(RequisitionRejectedEvent notification, CancellationToken cancellationToken)
@@ -21,5 +22,16 @@ public class NotifyRequesterOnRequisitionRejected(
         await notificationRepo.AddAsync(newNotification, cancellationToken);
 
         await notificationRepo.SaveChangesAsync(cancellationToken);
+
+        await notificationService.SendToUserAsync(
+            requisition.RequesterId,
+            new NotificationPayload(
+                Title: "Requisition Rejected",
+                Message: $"Your requisition #{notification.RequisitionNumber} was rejected. Reason: {notification.Reason}.",
+                Type: "error",
+                EntityId: notification.RequisitionId,
+                EntityType: "Requisition"
+            ),
+            cancellationToken);
     }
 }

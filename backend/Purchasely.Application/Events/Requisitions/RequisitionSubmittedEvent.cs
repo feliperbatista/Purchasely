@@ -8,5 +8,6 @@ public record RequisitionSubmittedEvent(
     DateTime SubmittedAt,
     string RequesterName,
     int RequisitionNumber,
-    List<string> ApproverEmails
+    List<string> ApproverEmails,
+    List<Guid> ApproverIds
 ) : INotification;

@@ -3,4 +3,5 @@
   <Project Path="Purchasely.Application/Purchasely.Application.csproj" />
   <Project Path="Purchasely.Domain/Purchasely.Domain.csproj" />
   <Project Path="Purchasely.Infrastructure/Purchasely.Infrastructure.csproj" />
+  <Project Path="Purchasely.UnitTests/Purchasely.UnitTests.csproj" />
 </Solution>

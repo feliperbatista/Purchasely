@@ -56,6 +56,9 @@ public class PurchaseOrder
 
     public void RecordReceipt(List<(Guid LineId, decimal Quantity)> receivedLines)
     {
+        if (Status == PurchaseOrderStatus.Received)
+            throw new InvalidOperationException("Purchase order already fully received.");
+            
         foreach (var (lineId, quantity) in receivedLines)
         {
             var line = Lines.First(l => l.Id == lineId);

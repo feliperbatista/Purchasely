@@ -37,6 +37,12 @@ public class Requisition
 
     public void Approve(Guid approverId)
     {
+        if (Status != RequisitionStatus.Submitted)
+            throw new InvalidOperationException("Only submitted requisitions can be approved.");
+
+        if (Approvals.Any(a => a.ApproverId == approverId))
+            throw new InvalidOperationException("Approver has already approved.");
+
         Status = RequisitionStatus.Approved;
         Approvals.Add(Approval.Create(Id, approverId));
     }
@@ -49,11 +55,17 @@ public class Requisition
 
     public void Reject()
     {
+        if (Status != RequisitionStatus.Submitted)
+            throw new InvalidOperationException("Only submitted requisitions can be rejected.");
+
         Status = RequisitionStatus.Rejected;
     }
 
     public void Submit()
     {
+        if (Status != RequisitionStatus.Draft)
+            throw new InvalidOperationException("Only draft requisitions can be submitted.");
+
         Status = RequisitionStatus.Submitted;
         SubmittedAt = DateTime.UtcNow;
     }

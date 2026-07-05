@@ -12,15 +12,22 @@ public class SupplierRepository(AppDbContext context) : ISupplierRepository
         await context.Suppliers.AddAsync(supplier, cancellationToken);
     }
 
+    public async Task<int> CountAsync(CancellationToken cancellationToken)
+    {
+        return await context.Suppliers.CountAsync(cancellationToken);
+    }
+
     public void Delete(Supplier supplier)
     {
         context.Suppliers.Remove(supplier);
     }
 
-    public async Task<List<Supplier>> GetAllAsync(CancellationToken cancellationToken)
+    public async Task<List<Supplier>> GetAllAsync(int page, int pageSize, CancellationToken cancellationToken)
     {
         return await context.Suppliers
             .AsNoTracking()
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
             .ToListAsync(cancellationToken);
     }
 

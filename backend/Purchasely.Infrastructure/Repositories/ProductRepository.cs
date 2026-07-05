@@ -12,15 +12,22 @@ public class ProductRepository(AppDbContext context) : IProductRepository
         await context.Products.AddAsync(product, cancellationToken);
     }
 
+    public async Task<int> CountAsync(CancellationToken cancellationToken)
+    {
+        return await context.Products.CountAsync(cancellationToken);
+    }
+
     public void Delete(Product product)
     {
         context.Products.Remove(product);
     }
 
-    public async Task<List<Product>> GetAllAsync(CancellationToken cancellationToken)
+    public async Task<List<Product>> GetAllAsync(int page, int pageSize, CancellationToken cancellationToken)
     {
         return await context.Products
             .AsNoTracking()
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
             .ToListAsync(cancellationToken);
     }
 

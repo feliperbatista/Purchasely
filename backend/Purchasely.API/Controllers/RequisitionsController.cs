@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Purchasely.Application.DTOs;
 using Purchasely.Application.Features.Requisitions.Commands;
 using Purchasely.Application.Features.Requisitions.Queries;
+using Purchasely.Domain.Enums;
 
 namespace Purchasely.API.Controllers;
 
@@ -13,9 +14,16 @@ namespace Purchasely.API.Controllers;
 public class RequisitionController(IMediator mediator) : ControllerBase
 {
     [HttpGet]
-    public async Task<IActionResult> GetAll(CancellationToken cancellationToken)
+    public async Task<IActionResult> GetAll(
+        [FromQuery] RequisitionStatus? status,
+        [FromQuery] Priority? priority,
+        [FromQuery] DateTime? from,
+        [FromQuery] DateTime? to,
+        [FromQuery] int page = 1,
+        [FromQuery] int pageSize = 20,
+        CancellationToken cancellationToken = default)
     {
-        var result = await mediator.Send(new GetRequisitionsQuery(), cancellationToken);
+        var result = await mediator.Send(new GetRequisitionsQuery(page, pageSize, status, priority, from, to), cancellationToken);
 
         if (!result.IsSuccess)
             return StatusCode(result.StatusCode, result.Errors);

@@ -13,9 +13,13 @@ namespace Purchasely.API.Controllers;
 public class SuppliersController(IMediator mediator) : ControllerBase
 {
     [HttpGet]
-    public async Task<IActionResult> GetAll(CancellationToken cancellationToken)
+    public async Task<IActionResult> GetAll(
+        [FromQuery] int page = 1,
+        [FromQuery] int pageSize = 20,
+        CancellationToken cancellationToken = default
+    )
     {
-        var result = await mediator.Send(new GetSuppliersQuery(), cancellationToken);
+        var result = await mediator.Send(new GetSuppliersQuery(page, pageSize), cancellationToken);
         if (!result.IsSuccess)
             return StatusCode(result.StatusCode, result.Errors);
 

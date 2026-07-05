@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Purchasely.Application.Interfaces;
 using Purchasely.Domain.Entities;
+using Purchasely.Domain.Enums;
 using Purchasely.Infrastructure.Persistence;
 
 namespace Purchasely.Infrastructure.Repositories;
@@ -17,10 +18,21 @@ public class RequisitionRepository(AppDbContext context) : IRequisitionRepositor
         await context.Requisitions.AddAsync(requisition, cancellationToken);
     }
 
-    public async Task<List<Requisition>> GetAllAsync(CancellationToken cancellationToken)
+    public async Task<int> CountAsync(CancellationToken cancellationToken)
+    {
+        return await context.Requisitions.CountAsync(cancellationToken);
+    }
+
+    public async Task<List<Requisition>> GetAllAsync(int page, int pageSize, RequisitionStatus? status = null, Priority? priority = null, DateTime? from = null, DateTime? to = null, CancellationToken cancellationToken = default)
     {
         return await context.Requisitions
             .AsNoTracking()
+            .Where(r => !status.HasValue || r.Status == status.Value)
+            .Where(r => !priority.HasValue || r.Priority == priority.Value)
+            .Where(r => !from.HasValue || r.CreatedAt >= from.Value.Date)
+            .Where(r => !to.HasValue || r.CreatedAt <= to.Value.Date.AddDays(1).AddTicks(-1))
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
             .Include(r => r.Lines)
                 .ThenInclude(l => l.Product)
             .Include(r => r.Requester)

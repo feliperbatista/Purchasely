@@ -5,21 +5,31 @@ using Purchasely.Application.Interfaces;
 
 namespace Purchasely.Application.Features.Suppliers.Queries;
 
-public record GetSuppliersQuery : IRequest<Result<List<SupplierListResponse>>>;
+public record GetSuppliersQuery(
+    int Page = 1,
+    int PageSize = 20
+) : IRequest<Result<PaginatedResponse<SupplierListResponse>>>;
 
 public class GetSuppliersQueryHandler(
     ISupplierRepository repository
-) : IRequestHandler<GetSuppliersQuery, Result<List<SupplierListResponse>>>
+) : IRequestHandler<GetSuppliersQuery, Result<PaginatedResponse<SupplierListResponse>>>
 {
-    public async Task<Result<List<SupplierListResponse>>> Handle(GetSuppliersQuery request, CancellationToken cancellationToken)
+    public async Task<Result<PaginatedResponse<SupplierListResponse>>> Handle(GetSuppliersQuery request, CancellationToken cancellationToken)
     {
-        var suppliers = await repository.GetAllAsync(cancellationToken);
-        return Result<List<SupplierListResponse>>.Success([.. suppliers.Select(s => new SupplierListResponse(
-            s.Id,
-            s.Name,
-            s.Email,
-            s.Phone,
-            s.IsActive
-        ))]);
+        var suppliers = await repository.GetAllAsync(request.Page, request.PageSize, cancellationToken);
+        var suppliersCount = await repository.CountAsync(cancellationToken);
+
+        return Result<PaginatedResponse<SupplierListResponse>>.Success(new PaginatedResponse<SupplierListResponse>(
+            [.. suppliers.Select(s => new SupplierListResponse(
+                s.Id,
+                s.Name,
+                s.Email,
+                s.Phone,
+                s.IsActive
+            ))],
+            request.Page,
+            request.PageSize,
+            suppliersCount
+        ));
     }
 }

@@ -66,13 +66,8 @@ builder.Services.ConfigureHttpJsonOptions(options =>
     options.SerializerOptions.Converters.Add(new JsonStringEnumConverter());
 });
 
-var app = builder.Build();
-
-if (app.Environment.IsDevelopment())
+if (builder.Environment.IsDevelopment())
 {
-    app.MapOpenApi();
-    app.MapScalarApiReference();
-
     builder.Services.AddCors(options =>
     {
         options.AddPolicy("Dev", policy => policy
@@ -83,12 +78,20 @@ if (app.Environment.IsDevelopment())
     });
 }
 
+var app = builder.Build();
+
+if (app.Environment.IsDevelopment())
+{
+    app.MapOpenApi();
+    app.MapScalarApiReference();
+    app.UseCors("Dev");
+}
+
 app.UseHttpsRedirection();
 app.UseExceptionHandler();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
-app.UseCors("Dev");
 
 app.MapHub<NotificationHub>("/hubs/notifications");
 

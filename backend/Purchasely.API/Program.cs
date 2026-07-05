@@ -72,6 +72,15 @@ if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
     app.MapScalarApiReference();
+
+    builder.Services.AddCors(options =>
+    {
+        options.AddPolicy("Dev", policy => policy
+            .WithOrigins("http://localhost:3000")
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials());
+    });
 }
 
 app.UseHttpsRedirection();
@@ -79,6 +88,7 @@ app.UseExceptionHandler();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
+app.UseCors("Dev");
 
 app.MapHub<NotificationHub>("/hubs/notifications");
 

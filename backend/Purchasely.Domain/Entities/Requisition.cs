@@ -19,7 +19,6 @@ public class Requisition
     private Requisition() {}
 
     public static Requisition Create(
-        RequisitionStatus status,
         Priority priority,
         string? justification,
         Guid requesterId,
@@ -27,7 +26,7 @@ public class Requisition
     {
         return new Requisition
         {
-            Status = status,
+            Status = RequisitionStatus.Draft,
             Priority = priority,
             Justification = justification,
             RequesterId = requesterId,

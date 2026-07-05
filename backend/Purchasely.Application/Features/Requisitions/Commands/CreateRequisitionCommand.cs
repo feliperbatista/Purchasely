@@ -35,7 +35,6 @@ public class CreateRequisitionCommandHandler(
         var productMap = products.ToDictionary(p => p.Id);
 
         var requisition = Requisition.Create(
-            RequisitionStatus.Draft,
             request.Priority,
             request.Justification,
             currentUserService.Id,

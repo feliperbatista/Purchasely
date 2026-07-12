@@ -63,7 +63,7 @@ export default function LoginPage() {
           </form>
 
           {login.isError && (
-            <div className='mb-6 flex items-center gap-2 px-4 py-3 bg-red-50 border border-red-200 rounded-lg'>
+            <div className='mt-6 flex items-center gap-2 px-4 py-3 bg-red-50 border border-red-200 rounded-lg'>
               <svg
                 className='w-4 h-4 text-red-500 shrink-0'
                 fill='currentColor'

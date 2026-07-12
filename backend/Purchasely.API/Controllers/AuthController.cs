@@ -6,6 +6,7 @@ using Purchasely.Application.DTOs;
 using Purchasely.Application.Features.Products.Commands;
 using Purchasely.Application.Features.Products.Queries;
 using Purchasely.Application.Features.Users.Commands;
+using Purchasely.Application.Features.Users.Queries;
 
 namespace Purchasely.API.Controllers;
 
@@ -55,6 +56,17 @@ public class AuthController(
         AppendCookies(result.Value!.AccessToken, result.Value!.RefreshToken);
 
         return NoContent();
+    }
+
+    [Authorize]
+    [HttpGet("me")]
+    public async Task<IActionResult> Me(CancellationToken cancellationToken)
+    {
+        var result = await mediator.Send(new GetCurrentUserQuery(), cancellationToken);
+        if (!result.IsSuccess)
+            return StatusCode(result.StatusCode, result.Errors);
+
+        return Ok(result.Value);
     }
 
     [Authorize]

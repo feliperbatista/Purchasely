@@ -23,6 +23,11 @@ public class RequisitionRepository(AppDbContext context) : IRequisitionRepositor
         return await context.Requisitions.CountAsync(cancellationToken);
     }
 
+    public async Task<int> CountByStatusAsync(RequisitionStatus[] status, CancellationToken cancellationToken)
+    {
+        return await context.Requisitions.CountAsync(r => status.Contains(r.Status), cancellationToken);
+    }
+
     public async Task<List<Requisition>> GetAllAsync(int page, int pageSize, RequisitionStatus? status = null, Priority? priority = null, DateTime? from = null, DateTime? to = null, CancellationToken cancellationToken = default)
     {
         return await context.Requisitions

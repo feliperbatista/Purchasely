@@ -17,6 +17,7 @@ public interface IRequisitionRepository
     );
 
     Task<int> CountAsync(CancellationToken cancellationToken);
+    Task<int> CountByStatusAsync(RequisitionStatus[] status, CancellationToken cancellationToken);
     Task AddAsync(Requisition requisition, CancellationToken cancellationToken);
     Task AddApprovalAsync(Approval approval, CancellationToken cancellationToken);
     Task<bool> SaveChangesAsync(CancellationToken cancellationToken);

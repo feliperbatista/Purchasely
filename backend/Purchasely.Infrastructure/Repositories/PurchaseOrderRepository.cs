@@ -19,6 +19,11 @@ public class PurchaseOrderRepository(AppDbContext context) : IPurchaseOrderRepos
         return await context.PurchaseOrders.CountAsync(cancellationToken);
     }
 
+    public async Task<int> CountByStatusAsync(PurchaseOrderStatus[] status, CancellationToken cancellationToken)
+    {
+        return await context.PurchaseOrders.CountAsync(p => status.Contains(p.Status), cancellationToken);
+    }
+
     public async Task<List<PurchaseOrder>> GetAllAsync(int page, int pageSize, PurchaseOrderStatus? status = null, DateTime? from = null, DateTime? to = null, CancellationToken cancellationToken = default)
     {
         return await context.PurchaseOrders
@@ -48,5 +53,17 @@ public class PurchaseOrderRepository(AppDbContext context) : IPurchaseOrderRepos
     public async Task<bool> SaveChangesAsync(CancellationToken cancellationToken)
     {
         return await context.SaveChangesAsync(cancellationToken) > 0;
+    }
+
+    public async Task<decimal> TotalSpendThisMonthAsync(CancellationToken cancellationToken)
+    {
+        var now = DateTime.UtcNow;
+        var startOfMonth = new DateTime(now.Year, now.Month, 1, 0, 0, 0, DateTimeKind.Utc);
+
+        return await context.PurchaseOrders
+            .Where(p => 
+                p.IssuedAt >= startOfMonth && 
+                p.Status != PurchaseOrderStatus.Cancelled)
+            .SumAsync(p => p.TotalAmount, cancellationToken);
     }
 }

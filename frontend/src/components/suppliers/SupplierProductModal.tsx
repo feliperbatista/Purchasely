@@ -15,6 +15,7 @@ import Input from '../common/Input';
 import Button from '../common/Button';
 import DeleteDialog from '../common/DeleteDialog';
 import { useProducts } from '../../hooks/useProducts';
+import Select from '../common/Select';
 
 type Props = {
   supplierId: string;
@@ -77,31 +78,18 @@ export default function SupplierProductModal({
         <form onSubmit={handleSubmit(onSubmit)} className='space-y-4'>
           <div className='grid grid-cols-2 gap-4'>
             <div className='col-span-2 flex flex-col gap-2'>
-              <div>
-                <label className='block text-sm font-medium text-gray-700 mb-1.5'>
-                  Product <span className='text-red-500'>*</span>
-                </label>
-                <select
-                  {...register('productId')}
-                  disabled={!!product}
-                  className={`w-full px-3.5 py-2.5 text-sm border rounded-lg outline-none transition
-                        focus:ring-2 focus:ring-orange-300 focus:border-transparent bg-white
-                        disabled:bg-gray-50 disabled:text-gray-400 disabled:cursor-not-allowed
-                        ${errors.productId ? 'border-red-400 bg-red-50' : 'border-gray-300'}`}
-                >
-                  {!product && <option value=''>Select a product</option>}
-                  {products.map((p) => (
-                    <option key={p.id} value={p.id}>
-                      {p.name} - {p.sku}
-                    </option>
-                  ))}
-                </select>
-                {errors.productId && (
-                  <p className='mt-1.5 text-xs text-red-500'>
-                    {errors.productId.message}
-                  </p>
-                )}
-              </div>
+              <Select
+                label='Product'
+                errors={errors.productId?.message}
+                selected={product?.name}
+                disabled={!!product}
+                options={products.map((product) => {
+                  return {
+                    id: product.id,
+                    option: `${product.name} - ${product.sku}`,
+                  };
+                })}
+              />
 
               <Input
                 label='Unit Price'

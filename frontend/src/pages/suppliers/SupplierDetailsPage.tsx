@@ -15,6 +15,7 @@ import DeleteDialog from '../../components/common/DeleteDialog';
 import SupplierProductModal from '../../components/suppliers/SupplierProductModal';
 import type { Product } from '../../types/product';
 import { toast } from 'sonner';
+import { getErrorMessage } from '../../lib/errors';
 
 export default function SupplierDetailsPage() {
   const { id } = useParams();
@@ -65,6 +66,7 @@ export default function SupplierDetailsPage() {
   const handleDelete = (id: string) => {
     remove.mutate(id, {
       onSuccess: () => navigate('/suppliers'),
+      onError: (error) => toast.error(getErrorMessage(error)),
     });
   };
 

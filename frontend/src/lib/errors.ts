@@ -17,6 +17,9 @@ export const getErrorMessage = (error: unknown): string => {
     if (Array.isArray(data) && data.length > 0)
       return data[0];
 
+    if (data?.detail)
+      return data.detail;
+
     if (data?.message)
       return data.message;
 

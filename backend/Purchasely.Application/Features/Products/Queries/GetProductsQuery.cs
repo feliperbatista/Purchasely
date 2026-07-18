@@ -21,7 +21,7 @@ public class GetProductsQueryHandler(
 
         return Result<PaginatedResponse<ProductResponse>>.Success(new PaginatedResponse<ProductResponse>(
             [.. products.Select(p =>
-            new ProductResponse(p.Id, p.SKU, p.Name, p.Description, p.Category))],
+            new ProductResponse(p.Id, p.SKU, p.Name, p.Description, p.Category, p.CreatedAt))],
             request.Page,
             request.PageSize,
             productsCount

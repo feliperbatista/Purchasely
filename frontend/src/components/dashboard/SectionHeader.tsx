@@ -14,7 +14,7 @@ export default function SectionHeader({
       <h3 className='text-sm font-semibold text-gray-900'>{title}</h3>
       <button
         onClick={() => navigate(to)}
-        className='flex items-center gap-1 text-xs text-blue-600 hover:text-blue-700 transition'
+        className='flex items-center gap-1 cursor-pointer text-xs text-blue-600 hover:text-blue-700 transition'
       >
         View all
         <ArrowRight className='w-3 h-3' />

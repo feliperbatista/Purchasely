@@ -5,5 +5,6 @@ public record ProductResponse(
     string SKU,
     string Name,
     string? Description,
-    string? Category
+    string? Category,
+    DateTime CreatedAt
 );

@@ -9,6 +9,7 @@ import { AppProviders } from './providers/AppProviders';
 import RequisitionsPage from './pages/requisitions/RequisitionsPage';
 import DashboardLayout from './components/layout/DashboardLayout';
 import PurchaseOrdersPage from './pages/purchase-orders/PurchaseOrdersPage';
+import ProductsPage from './pages/products/ProductsPage';
 
 export default function App() {
   return (
@@ -35,6 +36,7 @@ export default function App() {
                 path='/purchase-orders/:id'
                 element={<PurchaseOrderDetailPage />}
               />
+              <Route path='/products' element={<ProductsPage/>}/>
             </Route>
           </Route>
 

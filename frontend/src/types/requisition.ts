@@ -1,11 +1,6 @@
-export type RequisitionStatus =
-  | "Draft"
-  | "Submitted"
-  | "Approved"
-  | "Rejected"
-  | "ConvertedToPO";
+import type { Status } from './status';
 
-export type Priority = "Low" | "Normal" | "High";
+export type Priority = 'Low' | 'Normal' | 'High';
 
 export interface RequisitionLine {
   id: string;
@@ -18,7 +13,7 @@ export interface RequisitionLine {
 export interface Requisition {
   id: string;
   number: number;
-  status: RequisitionStatus;
+  status: Status;
   priority: Priority;
   justification?: string;
   createdAt: string;

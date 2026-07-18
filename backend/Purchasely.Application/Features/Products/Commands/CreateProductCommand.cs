@@ -25,7 +25,7 @@ public class CreateProductCommandHandler(
         var saved = await productRepo.SaveChangesAsync(cancellationToken);
 
         return saved 
-            ? Result<ProductResponse>.Success(new ProductResponse(product.Id, product.SKU, product.Name, product.Description, product.Category))
+            ? Result<ProductResponse>.Success(new ProductResponse(product.Id, product.SKU, product.Name, product.Description, product.Category, product.CreatedAt))
             : Result<ProductResponse>.Failure(400, "Failed saving in database");
     }
 }

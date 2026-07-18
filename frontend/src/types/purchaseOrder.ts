@@ -1,10 +1,4 @@
-export type PurchaseOrderStatus =
-  | "Draft"
-  | "Issued"
-  | "PartiallyReceived"
-  | "Received"
-  | "Closed"
-  | "Cancelled";
+import type { Status } from "./status";
 
 export interface PurchaseOrderLine {
   id: string;
@@ -22,7 +16,7 @@ export interface PurchaseOrder {
   supplierId: string;
   supplierName: string;
   requisitionId: string;
-  status: PurchaseOrderStatus;
+  status: Status;
   subtotal: number;
   taxAmount: number;
   totalAmount: number;

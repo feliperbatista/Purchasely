@@ -18,6 +18,6 @@ public class GetProductByIdQueryHandler(
         if (product is null)
             return Result<ProductResponse>.Failure(404, "Product not found");
 
-        return Result<ProductResponse>.Success(new ProductResponse(product.Id, product.SKU, product.Name, product.Description, product.Category));
+        return Result<ProductResponse>.Success(new ProductResponse(product.Id, product.SKU, product.Name, product.Description, product.Category, product.CreatedAt));
     }
 }

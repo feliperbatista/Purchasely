@@ -4,9 +4,8 @@ import Skeleton from '../components/common/Skeleton';
 import StatCard from '../components/dashboard/StatCard';
 import { ClipboardList, Clock, DollarSign, ShoppingCart } from 'lucide-react';
 import SectionHeader from '../components/dashboard/SectionHeader';
-import type { Requisition } from '../types/requisition';
 import StatusBadge from '../components/dashboard/StatusBadge';
-import type { PurchaseOrder } from '../types/purchaseOrder';
+import Table from '../components/common/Table';
 
 export default function DashboardPage() {
   const navigate = useNavigate();
@@ -59,125 +58,61 @@ export default function DashboardPage() {
 
       <div className='grid grid-cols-1 xl:grid-cols-2 gap-6'>
         <div className='bg-white rounded-xl border border-gray-100 p-5'>
-          <SectionHeader title='Recent Requisitions' to='/reqisitions' />
-          {reqLoading ? (
-            <div className='space-y-3'>
-              {Array.from({ length: 5 }).map((_, i) => (
-                <Skeleton key={i} className='h-10' />
-              ))}
-            </div>
-          ) : !requisitions?.length ? (
-            <p className='text-sm text-gray-400 text-center py-8'>
-              No requisitions yet
-            </p>
-          ) : (
-            <table className='w-full'>
-              <thead>
-                <tr className='border-b border-gray-50'>
-                  <th className='text-left text-xs font-medium text-gray-400 pb-2'>
-                    #
-                  </th>
-                  <th className='text-left text-xs font-medium text-gray-400 pb-2'>
-                    Requester
-                  </th>
-                  <th className='text-left text-xs font-medium text-gray-400 pb-2'>
-                    Priority
-                  </th>
-                  <th className='text-left text-xs font-medium text-gray-400 pb-2'>
-                    Status
-                  </th>
-                </tr>
-              </thead>
-              <tbody className='divide-y divide-gray-50'>
-                {requisitions.map((req: Requisition) => (
-                  <tr
-                    key={req.id}
-                    onClick={() => navigate(`/requisitions/${req.id}`)}
-                    className='cursor-pointer hover:bg-gray-50 transition'
+          <SectionHeader title='Recent Requisitions' to='/requisitions' />
+          <Table
+            data={requisitions}
+            loading={reqLoading}
+            emptyMessage='No requisitions yet'
+            getRowKey={(req) => req.id}
+            onRowClick={(req) => navigate(`/requisitions/${req.id}`)}
+            columns={[
+              { header: '#', render: (req) => <>#{req.number}</> },
+              { header: 'Requester', render: (req) => req.requesterName },
+              {
+                header: 'Priority',
+                render: (req) => (
+                  <span
+                    className={`text-xs font-medium ${
+                      req.priority === 'High'
+                        ? 'text-red-600'
+                        : req.priority === 'Normal'
+                          ? 'text-yellow-600'
+                          : 'text-gray-500'
+                    }`}
                   >
-                    <td className='py-4 text-sm font-medium text-gray-900'>
-                      #{req.number}
-                    </td>
-                    <td className='py-4 text-sm font-medium text-gray-600'>
-                      {req.requesterName}
-                    </td>
-                    <td className='py-3'>
-                      <span
-                        className={`text-xs font-medium ${
-                          req.priority === 'High'
-                            ? 'text-red-600'
-                            : req.priority === 'Normal'
-                              ? 'text-yellow-600'
-                              : 'text-gray-500'
-                        }`}
-                      >
-                        {req.priority}
-                      </span>
-                    </td>
-                    <td className='py-3'>
-                      <StatusBadge status={req.status} />
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          )}
+                    {req.priority}
+                  </span>
+                ),
+              },
+              {
+                header: 'Status',
+                render: (req) => <StatusBadge status={req.status} />,
+              },
+            ]}
+          />
         </div>
 
         <div className='bg-white rounded-xl border border-gray-100 p-5'>
           <SectionHeader title='Recent Purchase Orders' to='/purchase-orders' />
-          {poLoading ? (
-            <div className='space-y-3'>
-              {Array.from({ length: 5 }).map((_, i) => (
-                <Skeleton key={i} className='h-10' />
-              ))}
-            </div>
-          ) : !purchaseOrders?.length ? (
-            <p className='text-sm text-gray-400 text-center py-8'>
-              No purchase orders yet
-            </p>
-          ) : (
-            <table className='w-full'>
-              <thead>
-                <tr className='border-b border-gray-50'>
-                  <th className='text-left text-xs font-medium text-gray-400 pb-2'>
-                    PO Number
-                  </th>
-                  <th className='text-left text-xs font-medium text-gray-400 pb-2'>
-                    Supplier
-                  </th>
-                  <th className='text-left text-xs font-medium text-gray-400 pb-2'>
-                    Total
-                  </th>
-                  <th className='text-left text-xs font-medium text-gray-400 pb-2'>
-                    Status
-                  </th>
-                </tr>
-              </thead>
-              <tbody className='divide-y divide-gray-50'>
-                {purchaseOrders.map((po: PurchaseOrder) => (
-                  <tr
-                    key={po.id}
-                    onClick={() => navigate(`/purchase-orders/${po.id}`)}
-                    className='cursor-pointer hover:bg-gray-50 transition'
-                  >
-                    <td className='py-4 text-sm font-medium text-gray-900'>
-                      #{po.poNumber}
-                    </td>
-                    <td className='py-4 text-sm font-medium text-gray-600'>
-                      {po.supplierName}
-                    </td>
-                    <td className='py-3 text-sm font-medium text-gray-900'>
-                      {po.totalAmount.toLocaleString()}
-                    </td>
-                    <td className='py-3'>
-                      <StatusBadge status={po.status} />
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          )}
+          <Table
+            data={purchaseOrders}
+            loading={poLoading}
+            emptyMessage='No purchase orders yet'
+            getRowKey={(po) => po.id}
+            onRowClick={(po) => navigate(`/purchase-orders/${po.id}`)}
+            columns={[
+              { header: 'PO Number', render: (po) => <>#{po.poNumber}</> },
+              { header: 'Supplier', render: (po) => po.supplierName },
+              {
+                header: 'Total',
+                render: (po) => po.totalAmount.toLocaleString(),
+              },
+              {
+                header: 'Status',
+                render: (po) => <StatusBadge status={po.status} />,
+              },
+            ]}
+          />
         </div>
       </div>
     </div>

@@ -83,6 +83,7 @@ export default function SupplierProductModal({
                 errors={errors.productId?.message}
                 selected={product?.name}
                 disabled={!!product}
+                {...register('productId')}
                 options={products.map((product) => {
                   return {
                     id: product.id,

@@ -25,7 +25,7 @@ export const statuses = {
   },
   PartiallyReceived: {
     label: 'Partially Received',
-    style: 'bg-orange-100 text-orange-700',
+    style: 'bg-orange-100 text-blue-700',
   },
   Received: {
     label: 'Received',

@@ -25,7 +25,7 @@ export default function Sidebar() {
   return (
     <aside className='fixed top-0 left-0 h-screen w-56 bg-white border-r border-gray-100 flex flex-col'>
       <div className='px-5 py-5 border-b border-gray-100'>
-        <h1 className='text-lg font-bold text-gray-900'>Purchasely</h1>
+        <h1 className='text-2xl font-satisfy font-bold text-gray-900'>Purchasely</h1>
         <p className='text-xs text-gray-400 mt-0.5 truncate'>{user?.email}</p>
       </div>
 
@@ -36,7 +36,7 @@ export default function Sidebar() {
             to={to}
             className={({ isActive }) =>
               `flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition
-          ${isActive ? 'bg-blue-50 text-blue-600 font-medium' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'}`
+          ${isActive ? 'bg-orange-50 text-orange-500 font-medium' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'}`
             }
           >
             <Icon className='w-4 h-4 shrink-0' />

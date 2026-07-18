@@ -29,7 +29,7 @@ export default function LoginPage() {
     <div className='min-h-screen bg-gray-50 flex items-center justify-center px-4'>
       <div className='w-full max-w-md'>
         <div className='mb-8 text-center'>
-          <h1 className='text-3xl font-bold text-gray-900'>Purchasely</h1>
+          <h1 className='text-5xl font-satisfy font-bold text-orange-500'>Purchasely</h1>
           <p className='text-gray-500 mt-2 text-sm'>Sign in to your account</p>
         </div>
 

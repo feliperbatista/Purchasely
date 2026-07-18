@@ -31,8 +31,8 @@ export default function DashboardPage() {
             <StatCard
               label='Total Requisitions'
               value={stats?.totalRequisitions ?? 0}
-              icon={<ClipboardList className='w-5 h-5 text-blue-600' />}
-              color='bg-blue-50'
+              icon={<ClipboardList className='w-5 h-5 text-orange-500' />}
+              color='bg-orange-50'
             />
             <StatCard
               label='Pending Approvals'

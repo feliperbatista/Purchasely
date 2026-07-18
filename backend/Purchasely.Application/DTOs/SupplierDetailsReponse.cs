@@ -13,6 +13,7 @@ public record SupplierDetailsResponse(
 );
 
 public record SupplierProducts(
+    Guid Id,
     string SKU,
     string Name,
     decimal UnitPrice,

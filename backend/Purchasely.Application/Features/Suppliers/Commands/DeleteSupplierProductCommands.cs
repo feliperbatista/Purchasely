@@ -12,17 +12,22 @@ public record DeleteSupplierProductCommand(
 ) : IRequest<Result<Unit>>;
 
 public class DeleteSupplierProductCommandHandler(
-    ISupplierProductRepository repository
+    ISupplierProductRepository supplierProductRepo,
+    ISupplierRepository supplierRepo
 ) : IRequestHandler<DeleteSupplierProductCommand, Result<Unit>>
 {
     public async Task<Result<Unit>> Handle(DeleteSupplierProductCommand request, CancellationToken cancellationToken)
     {
-        var product = await repository.GetByIdsAsync(request.SupplierId, request.ProductId, cancellationToken);
+        var supplier = await supplierRepo.GetByIdAsync(request.SupplierId, cancellationToken);
+        if (supplier is null)
+            return Result<Unit>.Failure(404, "Supplier does not exist");
+
+        var product = await supplierProductRepo.GetByIdAsync(request.ProductId, cancellationToken);
         if (product is null)
             return Result<Unit>.Failure(404, "Product does not exist");
 
-        repository.Delete(product);
-        bool saved = await repository.SaveChangesAsync(cancellationToken);
+        supplierProductRepo.Delete(product);
+        bool saved = await supplierProductRepo.SaveChangesAsync(cancellationToken);
 
         return saved 
             ? Result<Unit>.Success(Unit.Value)

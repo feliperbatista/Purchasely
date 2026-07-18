@@ -14,8 +14,9 @@ import Modal from '../common/Modal';
 import { useState } from 'react';
 import { toast } from 'sonner';
 import { getErrorMessage } from '../../lib/errors';
+import DeleteDialog from '../common/DeleteDialog';
 
-interface ProductModalProps {
+type ProductModalProps = {
   product?: Product;
   onClose: () => void;
 }
@@ -138,32 +139,12 @@ export default function ProductModal({ product, onClose }: ProductModalProps) {
       </div>
 
       {showDeleteDialog && (
-        <Modal onClose={() => setShowDeleteDialog(false)}>
-          <div className='relative bg-white rounded-2xl shadow-xl w-full max-w-sm mx-4 p-6'>
-            <h2 className='text-base font-semibold text-gray-900 mb-2'>
-              Delete Product
-            </h2>
-            <p>
-              Are you sure you want to delete <strong>{product?.name}</strong>?
-              This action cannot be undone.
-            </p>
-            <div className='flex justify-end gap-2'>
-              <Button
-                variant='secondary'
-                onClick={() => setShowDeleteDialog(false)}
-              >
-                Cancel
-              </Button>
-              <Button
-                variant='danger'
-                loading={remove.isPending}
-                onClick={() => handleDelete(product!.id)}
-              >
-                Delete
-              </Button>
-            </div>
-          </div>
-        </Modal>
+        <DeleteDialog
+          onClose={() => setShowDeleteDialog(false)}
+          itemName={product?.name}
+          loading={remove.isPending}
+          onConfirm={() => handleDelete(product!.id)}
+        />
       )}
     </Modal>
   );

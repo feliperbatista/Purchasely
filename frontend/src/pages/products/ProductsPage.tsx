@@ -5,6 +5,7 @@ import Button from '../../components/common/Button';
 import { Plus } from 'lucide-react';
 import Table from '../../components/common/Table';
 import ProductModal from '../../components/products/ProductModal';
+import Pagination from '../../components/common/Pagination';
 
 export default function ProductsPage() {
   const [modal, setModal] = useState<{ open: boolean; product?: Product }>({
@@ -70,29 +71,14 @@ export default function ProductsPage() {
         />
 
         {totalPages > 1 && (
-          <div className='flex items-center justify-between px-4 py-3 border-t border-gray-100'>
-            <p className='text-xs text-gray-500'>
-              Page {currentPage} of {totalPages}
-            </p>
-            <div className='flex gap-2'>
-              <Button
-                variant='secondary'
-                size='sm'
-                disabled={!hasPrevious}
-                onClick={() => setPage(page - 1)}
-              >
-                Previous
-              </Button>
-              <Button
-                variant='secondary'
-                size='sm'
-                disabled={!hasNext}
-                onClick={() => setPage(page + 1)}
-              >
-                Next
-              </Button>
-            </div>
-          </div>
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            hasPrevious={hasPrevious}
+            hasNext={hasNext}
+            onPreviousClick={() => setPage(page - 1)}
+            onNextClick={() => setPage(page + 1)}
+          />
         )}
 
         {modal.open && (

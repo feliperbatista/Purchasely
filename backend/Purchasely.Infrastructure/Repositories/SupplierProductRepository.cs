@@ -23,10 +23,10 @@ public class SupplierProductRepository(AppDbContext context) : ISupplierProductR
             .AnyAsync(x => x.SupplierId == supplierId && x.ProductId == productId, cancellationToken);
     }
 
-    public async Task<SupplierProduct?> GetByIdsAsync(Guid supplierId, Guid productId, CancellationToken cancellationToken)
+    public async Task<SupplierProduct?> GetByIdAsync(Guid supplierProductId, CancellationToken cancellationToken)
     {
         return await context.SupplierProducts
-            .FirstOrDefaultAsync(x => x.SupplierId == supplierId && x.ProductId == productId, cancellationToken);
+            .FirstOrDefaultAsync(x => x.Id == supplierProductId, cancellationToken);
     }
 
     public async Task<bool> SaveChangesAsync(CancellationToken cancellationToken)

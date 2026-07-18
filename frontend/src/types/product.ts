@@ -4,7 +4,7 @@ export interface Product {
   sku: string;
   description?: string;
   category: string;
-  unitPrice: number;
+  unitPrice?: number;
   createdAt: string;
 }
 

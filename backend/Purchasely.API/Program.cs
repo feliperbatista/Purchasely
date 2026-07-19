@@ -1,6 +1,7 @@
 using System.Text;
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Purchasely.API.Hubs;
 using Purchasely.API.Middleware;
@@ -9,6 +10,8 @@ using Purchasely.Application.Extensions;
 using Purchasely.Application.Interfaces;
 using Purchasely.Infrastructure.Authentication;
 using Purchasely.Infrastructure.Extensions;
+using Purchasely.Infrastructure.Persistence;
+using Purchasely.Infrastructure.Persistence.Seeders;
 using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -79,6 +82,15 @@ if (builder.Environment.IsDevelopment())
 }
 
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    await db.Database.MigrateAsync();
+
+    if (app.Environment.IsDevelopment())
+        await DatabaseSeeder.SeedAsync(db);
+}
 
 if (app.Environment.IsDevelopment())
 {

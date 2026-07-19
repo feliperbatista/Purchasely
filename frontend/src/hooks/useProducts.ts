@@ -3,13 +3,19 @@ import type { CreateProductRequest } from '../types/product';
 import { productsApi } from '../api/products';
 import { useState } from 'react';
 
-export function useProducts() {
+export function useProducts(search = '') {
   const queryClient = useQueryClient();
   const [page, setPage] = useState(1);
 
   const query = useQuery({
     queryKey: ['products', page],
     queryFn: () => productsApi.getAll(page),
+  });
+
+  const searchQuery = useQuery({
+    queryKey: ['products', 'search', search],
+    queryFn: () => productsApi.getAll(1, 10, search),
+    enabled: search.length > 0,
   });
 
   const create = useMutation({
@@ -47,5 +53,7 @@ export function useProducts() {
     create,
     update,
     remove,
+    searchResults: searchQuery.data?.items ?? [],
+    isSearching: searchQuery.isLoading,
   };
 }

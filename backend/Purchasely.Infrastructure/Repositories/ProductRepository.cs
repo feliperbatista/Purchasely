@@ -22,9 +22,20 @@ public class ProductRepository(AppDbContext context) : IProductRepository
         context.Products.Remove(product);
     }
 
-    public async Task<List<Product>> GetAllAsync(int page, int pageSize, CancellationToken cancellationToken)
+    public async Task<List<Product>> GetAllAsync(int page, int pageSize, string? search, CancellationToken cancellationToken)
     {
-        return await context.Products
+        var query = context.Products.AsQueryable();
+
+        if (!string.IsNullOrEmpty(search))
+        {
+            var term = $"%{search}%";
+            query = query.Where(p => 
+                EF.Functions.ILike(p.Name, term) ||
+                EF.Functions.ILike(p.SKU, term));
+        }
+            
+
+        return await query
             .AsNoTracking()
             .Skip((page - 1) * pageSize)
             .Take(pageSize)

@@ -3,9 +3,9 @@ import type { PagedResult } from '../types/common';
 import type { CreateProductRequest, Product } from '../types/product';
 
 export const productsApi = {
-  getAll: async (page = 1, pageSize = 10): Promise<PagedResult<Product>> => {
+  getAll: async (page = 1, pageSize = 10, search = ""): Promise<PagedResult<Product>> => {
     const res = await api.get(
-      `/api/products?page=${page}&pageSize=${pageSize}`,
+      `/api/products?page=${page}&pageSize=${pageSize}&search=${search}`,
     );
     return res.data;
   },

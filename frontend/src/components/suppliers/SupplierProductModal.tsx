@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useSuppliers } from '../../hooks/useSuppliers';
 import type { Product } from '../../types/product';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
   supplierProductSchema,
@@ -14,8 +14,7 @@ import { Trash2, X } from 'lucide-react';
 import Input from '../common/Input';
 import Button from '../common/Button';
 import DeleteDialog from '../common/DeleteDialog';
-import { useProducts } from '../../hooks/useProducts';
-import Select from '../common/Select';
+import ProductSearch from '../products/ProductSearch';
 
 type Props = {
   supplierId: string;
@@ -29,12 +28,12 @@ export default function SupplierProductModal({
   onClose,
 }: Props) {
   const { addProduct, removeProduct } = useSuppliers(supplierId);
-  const { products } = useProducts();
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 
   const {
     register,
     handleSubmit,
+    control,
     formState: { errors },
   } = useForm<SupplierProductFormData>({
     resolver: zodResolver(supplierProductSchema),
@@ -78,18 +77,17 @@ export default function SupplierProductModal({
         <form onSubmit={handleSubmit(onSubmit)} className='space-y-4'>
           <div className='grid grid-cols-2 gap-4'>
             <div className='col-span-2 flex flex-col gap-2'>
-              <Select
-                label='Product'
-                errors={errors.productId?.message}
-                selected={product?.name}
-                disabled={!!product}
-                {...register('productId')}
-                options={products.map((product) => {
-                  return {
-                    id: product.id,
-                    option: `${product.name} - ${product.sku}`,
-                  };
-                })}
+              <Controller
+                name='productId'
+                control={control}
+                render={({ field }) => (
+                  <ProductSearch
+                    value={field.value}
+                    onChange={field.onChange}
+                    error={errors.productId?.message}
+                    disabled={!!product}
+                  />
+                )}
               />
 
               <Input

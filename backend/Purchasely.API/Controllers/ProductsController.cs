@@ -16,10 +16,11 @@ public class ProductsController(IMediator mediator) : ControllerBase
     public async Task<IActionResult> GetAll(
         [FromQuery] int page = 1,
         [FromQuery] int pageSize = 20,
+        [FromQuery] string? search = null,
         CancellationToken cancellationToken = default
     )
     {
-        var result = await mediator.Send(new GetProductsQuery(page, pageSize), cancellationToken);
+        var result = await mediator.Send(new GetProductsQuery(page, pageSize, search), cancellationToken);
         if (!result.IsSuccess)
             return StatusCode(result.StatusCode, result.Errors);
 

@@ -8,6 +8,7 @@ type ProductSearchProps = {
   onChange: (productId: string) => void;
   error?: string;
   disabled?: boolean;
+  initialProduct?: Product;
 };
 
 export default function ProductSearch({
@@ -15,10 +16,13 @@ export default function ProductSearch({
   onChange,
   error,
   disabled,
+  initialProduct,
 }: ProductSearchProps) {
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState('');
-  const [selected, setSelected] = useState<Product | null>(null);
+  const [selected, setSelected] = useState<Product | null>(
+    initialProduct ?? null,
+  );
 
   const { searchResults, isSearching } = useProducts(search);
 
@@ -44,9 +48,8 @@ export default function ProductSearch({
         type='button'
         disabled={disabled}
         onClick={() => setOpen((o) => !o)}
-        className={`w-full flex items-center justify-between px-3.5 py-2.5 text-sm border rounded-lg outline-none transition text-left
-          ${error ? 'border-red-400 bg-red-50' : 'border-gray-100 bg-white'}
-          ${disabled ? 'bg-gray-50 text-gray-400 cursor-not-allowed' : 'hover:border-orange-400 cursor-pointer'}
+        className={`w-full flex items-center justify-between px-3.5 py-2.5 text-sm border rounded-lg outline-none transition text-left disabled:bg-gray-50 disabled:text-blue-900 disabled:cursor-not-allowed disabled:border-none hover:border-orange-400 hover:cursor-pointer
+          ${error ? 'border-red-400 bg-red-50' : 'border-gray-100'}
           `}
       >
         <span className={selected ? 'text-black' : 'text-gray-700'}>

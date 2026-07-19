@@ -86,6 +86,7 @@ export default function SupplierProductModal({
                     onChange={field.onChange}
                     error={errors.productId?.message}
                     disabled={!!product}
+                    initialProduct={product}
                   />
                 )}
               />

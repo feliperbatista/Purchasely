@@ -10,7 +10,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import Table from '../../components/common/Table';
 import Button from '../../components/common/Button';
 import { Plus, Save, Trash2 } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import DeleteDialog from '../../components/common/DeleteDialog';
 import SupplierProductModal from '../../components/suppliers/SupplierProductModal';
 import type { Product } from '../../types/product';
@@ -39,11 +39,23 @@ export default function SupplierDetailsPage() {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm<SupplierFormData>({
     resolver: zodResolver(supplierSchema),
-    defaultValues: supplier ?? {},
   });
+
+  useEffect(() => {
+    if (supplier) {
+      reset({
+        name: supplier.name,
+        email: supplier.email,
+        phone: supplier.phone,
+        address: supplier.address,
+        taxNumber: supplier.taxNumber,
+      });
+    }
+  }, [supplier, reset]);
 
   const onSubmit = (data: SupplierFormData) => {
     if (supplier) {

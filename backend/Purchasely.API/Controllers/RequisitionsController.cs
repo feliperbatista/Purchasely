@@ -21,9 +21,10 @@ public class RequisitionController(IMediator mediator) : ControllerBase
         [FromQuery] DateTime? to,
         [FromQuery] int page = 1,
         [FromQuery] int pageSize = 20,
+        [FromQuery] bool myRequisitions = false,
         CancellationToken cancellationToken = default)
     {
-        var result = await mediator.Send(new GetRequisitionsQuery(page, pageSize, status, priority, from, to), cancellationToken);
+        var result = await mediator.Send(new GetRequisitionsQuery(page, pageSize, status, priority, from, to, myRequisitions), cancellationToken);
 
         if (!result.IsSuccess)
             return StatusCode(result.StatusCode, result.Errors);

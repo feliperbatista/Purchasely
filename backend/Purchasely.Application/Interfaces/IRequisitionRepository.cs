@@ -13,6 +13,7 @@ public interface IRequisitionRepository
         Priority? priority = null,
         DateTime? from = null,
         DateTime? to = null,
+        Guid? currentUserId = null,
         CancellationToken cancellationToken = default
     );
 

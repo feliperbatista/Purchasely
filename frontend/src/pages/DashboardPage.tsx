@@ -4,7 +4,7 @@ import Skeleton from '../components/common/Skeleton';
 import StatCard from '../components/dashboard/StatCard';
 import { ClipboardList, Clock, DollarSign, ShoppingCart } from 'lucide-react';
 import SectionHeader from '../components/dashboard/SectionHeader';
-import StatusBadge from '../components/dashboard/StatusBadge';
+import StatusBadge from '../components/common/StatusBadge';
 import Table from '../components/common/Table';
 
 export default function DashboardPage() {

@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Purchasely.Application.Interfaces;
 using Purchasely.Domain.Entities;
 using Purchasely.Domain.Enums;
+using Purchasely.Infrastructure.Extensions;
 using Purchasely.Infrastructure.Persistence;
 
 namespace Purchasely.Infrastructure.Repositories;
@@ -28,14 +29,15 @@ public class RequisitionRepository(AppDbContext context) : IRequisitionRepositor
         return await context.Requisitions.CountAsync(r => status.Contains(r.Status), cancellationToken);
     }
 
-    public async Task<List<Requisition>> GetAllAsync(int page, int pageSize, RequisitionStatus? status = null, Priority? priority = null, DateTime? from = null, DateTime? to = null, CancellationToken cancellationToken = default)
+    public async Task<List<Requisition>> GetAllAsync(int page, int pageSize, RequisitionStatus? status = null, Priority? priority = null, DateTime? from = null, DateTime? to = null, Guid? currentUserId = null, CancellationToken cancellationToken = default)
     {
         return await context.Requisitions
             .AsNoTracking()
             .Where(r => !status.HasValue || r.Status == status.Value)
             .Where(r => !priority.HasValue || r.Priority == priority.Value)
-            .Where(r => !from.HasValue || r.CreatedAt >= from.Value.Date)
-            .Where(r => !to.HasValue || r.CreatedAt <= to.Value.Date.AddDays(1).AddTicks(-1))
+            .Where(r => !from.HasValue || r.CreatedAt >= from.Value.Date.ToUtc())
+            .Where(r => !to.HasValue || r.CreatedAt <= to.Value.Date.ToUtc().AddDays(1).AddTicks(-1))
+            .Where(r => !currentUserId.HasValue || r.RequesterId == currentUserId)
             .Skip((page - 1) * pageSize)
             .Take(pageSize)
             .Include(r => r.Lines)

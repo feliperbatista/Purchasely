@@ -32,3 +32,12 @@ export interface CreateRequisitionRequest {
     estimatedUnitPrice: number;
   }[];
 }
+
+export interface RequisitionFilters {
+  status?: Status;
+  from?: string;
+  to?: string;
+  myRequisitions?: boolean;
+  page?: number;
+  pageSize?: number;
+}

@@ -12,11 +12,13 @@ public record GetRequisitionsQuery(
     RequisitionStatus? Status = null,
     Priority? Priority = null,
     DateTime? From = null,
-    DateTime? To = null
+    DateTime? To = null,
+    bool MyRequisitions = false
 ) : IRequest<Result<PaginatedResponse<RequisitionResponse>>>;
 
 public class GetRequisitionsQueryHandler(
-    IRequisitionRepository repository
+    IRequisitionRepository repository,
+    ICurrentUserService currentUserService
 ) : IRequestHandler<GetRequisitionsQuery, Result<PaginatedResponse<RequisitionResponse>>>
 {
     public async Task<Result<PaginatedResponse<RequisitionResponse>>> Handle(GetRequisitionsQuery request, CancellationToken cancellationToken)
@@ -28,6 +30,7 @@ public class GetRequisitionsQueryHandler(
             request.Priority,
             request.From,
             request.To,
+            request.MyRequisitions ? currentUserService.Id : null,
             cancellationToken);
 
         var requisitionsCount = await repository.CountAsync(cancellationToken);

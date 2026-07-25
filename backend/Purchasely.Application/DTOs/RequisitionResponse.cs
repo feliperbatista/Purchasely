@@ -18,6 +18,7 @@ public record RequisitionResponse(
 
 public record RequisitionLines(
     Guid Id,
+    Guid ProductId,
     string ProductName,
     decimal QuantityRequested,
     decimal EstimatedUnitPrice

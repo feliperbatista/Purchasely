@@ -68,6 +68,7 @@ public class UpdateRequisitionCommandHandler(
                 currentUserService.Id,
                 requisition.Lines.Select(l => new RequisitionLines(
                     l.Id,
+                    l.ProductId,
                     productMap[l.ProductId].Name,
                     l.QuantityRequested,
                     l.EstimatedUnitPrice

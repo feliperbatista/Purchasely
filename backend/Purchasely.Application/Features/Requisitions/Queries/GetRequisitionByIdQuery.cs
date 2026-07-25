@@ -29,6 +29,7 @@ public class GetRequisitionByIdQueryHandler(
                 requisition.Requester.Id,
                 requisition.Lines.Select(l => new RequisitionLines(
                     l.Id,
+                    l.Product.Id,
                     l.Product.Name,
                     l.QuantityRequested,
                     l.EstimatedUnitPrice

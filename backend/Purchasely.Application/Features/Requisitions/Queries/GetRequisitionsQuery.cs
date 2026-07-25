@@ -48,6 +48,7 @@ public class GetRequisitionsQueryHandler(
                 r.Requester.Id,
                 r.Lines.Select(l => new RequisitionLines(
                     l.Id,
+                    l.Product.Id,
                     l.Product.Name,
                     l.QuantityRequested,
                     l.EstimatedUnitPrice

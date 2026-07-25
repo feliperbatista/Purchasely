@@ -92,7 +92,7 @@ export default function NewRequisitionPage() {
         {step === 2 && (
           <Step2
             form={form}
-            onBack={() => setStep(2)}
+            onBack={() => setStep(1)}
             onSaveDraft={handleSaveDraft}
             onSubmit={handleSubmit}
             isSaving={create.isPending && !isSubmitting}

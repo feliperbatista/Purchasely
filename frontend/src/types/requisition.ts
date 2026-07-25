@@ -21,6 +21,7 @@ export interface Requisition {
   requesterId: string;
   requesterName: string;
   lines: RequisitionLine[];
+  approvals: Approvals[];
 }
 
 export interface CreateRequisitionRequest {
@@ -40,4 +41,10 @@ export interface RequisitionFilters {
   myRequisitions?: boolean;
   page?: number;
   pageSize?: number;
+}
+
+export interface Approvals {
+  id: string;
+  approver: string;
+  approvedAt: string;
 }

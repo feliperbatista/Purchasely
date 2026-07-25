@@ -6,13 +6,19 @@ import type {
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { requisitionsApi } from '../api/requisitions';
 
-export function useRequisitions() {
+export function useRequisitions(id?: string) {
   const queryClient = useQueryClient();
   const [filters, setFilters] = useState<RequisitionFilters>({ page: 1 });
 
   const query = useQuery({
     queryKey: ['requisitions', filters],
     queryFn: () => requisitionsApi.getAll(filters),
+  });
+
+  const { data: requisition, isLoading: isLoadingRequisition } = useQuery({
+    queryKey: ['requisitions', id],
+    queryFn: () => requisitionsApi.getById(id!),
+    enabled: !!id,
   });
 
   const create = useMutation({
@@ -23,9 +29,47 @@ export function useRequisitions() {
   });
 
   const submit = useMutation({
-    mutationFn: (id: string) => requisitionsApi.submit(id),
+    mutationFn: (requisitionId: string) =>
+      requisitionsApi.submit(requisitionId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['requisitions'] });
+      queryClient.invalidateQueries({ queryKey: ['requisitions', id] });
+    },
+  });
+
+  const approve = useMutation({
+    mutationFn: (requisitionId: string) =>
+      requisitionsApi.approve(requisitionId),
     onSuccess: () =>
-      queryClient.invalidateQueries({ queryKey: ['requisitions'] }),
+      queryClient.invalidateQueries({ queryKey: ['requisitions', id] }),
+  });
+
+  const reject = useMutation({
+    mutationFn: ({
+      requisitionId,
+      reason,
+    }: {
+      requisitionId: string;
+      reason: string;
+    }) => requisitionsApi.reject(requisitionId, reason),
+    onSuccess: () =>
+      queryClient.invalidateQueries({ queryKey: ['requisitions', id] }),
+  });
+
+  const removeApproval = useMutation({
+    mutationFn: (requisitionId: string) =>
+      requisitionsApi.removeApproval(requisitionId),
+    onSuccess: () =>
+      queryClient.invalidateQueries({ queryKey: ['requisitions', id] }),
+  });
+
+  const convertToPO = useMutation({
+    mutationFn: (requisitionId: string) =>
+      requisitionsApi.convertToPO(requisitionId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['requisitions', id] });
+      queryClient.invalidateQueries({ queryKey: ['purchase-orders'] });
+    },
   });
 
   const setFilter = <K extends keyof RequisitionFilters>(
@@ -51,5 +95,11 @@ export function useRequisitions() {
     setPage: (page: number) => setFilters((prev) => ({ ...prev, page })),
     create,
     submit,
+    requisition,
+    isLoadingRequisition,
+    approve,
+    reject,
+    removeApproval,
+    convertToPO,
   };
 }

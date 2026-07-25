@@ -1,15 +1,10 @@
-import type { Priority, Requisition } from '../../types/requisition';
+import { priorities } from '../../types/priority';
+import type { Requisition } from '../../types/requisition';
 import StatusBadge from '../common/StatusBadge';
 
 type Props = {
   requisition: Requisition;
   onClick: () => void;
-};
-
-const priorityStyles: Record<Priority, string> = {
-  Low: 'text-gray-400',
-  Normal: 'text-yellow-900',
-  High: 'text-red-600',
 };
 
 export default function RequisitionCard({ requisition, onClick }: Props) {
@@ -29,7 +24,7 @@ export default function RequisitionCard({ requisition, onClick }: Props) {
             ${requisition.number}
           </p>
           <p className='text-sm font-semibold text-gray-900 mt-0.5 line-clamp-1'>
-             {requisition.justification ?? "No justification"}
+            {requisition.justification ?? 'No justification'}
           </p>
         </div>
         <StatusBadge status={requisition.status} />
@@ -56,7 +51,7 @@ export default function RequisitionCard({ requisition, onClick }: Props) {
       <div className='flex items-center justify-between'>
         <div className='flex items-center gap-3'>
           <span
-            className={`text-xs font-medium ${priorityStyles[requisition.priority]}`}
+            className={`text-xs font-medium ${priorities[requisition.priority]}`}
           >
             {requisition.priority}
           </span>

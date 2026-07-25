@@ -23,7 +23,7 @@ export const requisitionsApi = {
   },
 
   getById: async (id: string): Promise<Requisition> => {
-    const res = await api.get(`/api/requisiton/${id}`);
+    const res = await api.get(`/api/requisition/${id}`);
     return res.data;
   },
 
@@ -34,5 +34,22 @@ export const requisitionsApi = {
 
   submit: async (id: string): Promise<void> => {
     await api.post(`/api/requisition/${id}/submit`);
+  },
+
+  approve: async (id: string): Promise<void> => {
+    await api.post(`/api/requisition/${id}/approve`);
+  },
+
+  removeApproval: async (id: string): Promise<void> => {
+    await api.post(`/api/requisition/${id}/remove-approval`);
+  },
+
+  reject: async (id: string, reason: string): Promise<void> => {
+    await api.post(`/api/requisition/${id}/reject`, { reason });
+  },
+
+  convertToPO: async (id: string): Promise<{ id: string }> => {
+    const res = await api.post(`/api/requisition/${id}/convert-to-po`);
+    return res.data;
   },
 };

@@ -13,6 +13,7 @@ import { ArrowLeft } from 'lucide-react';
 import StepIndicator from '../../components/requisitions/StepIndicator';
 import Step1 from '../../components/requisitions/Step1';
 import Step2 from '../../components/requisitions/Step2';
+import NotFoundPage from '../NotFoundPage';
 
 export default function NewRequisitionPage() {
   const navigate = useNavigate();
@@ -88,7 +89,7 @@ export default function NewRequisitionPage() {
 
   if (isLoading) return <div>loading</div>;
 
-  if (id && !requisition) return <div>not found</div>;
+  if (id && !requisition) return <NotFoundPage inline/>;
 
   if (requisition && requisition?.status !== 'Draft')
     navigate(`/requisitions/${requisition?.id}`);

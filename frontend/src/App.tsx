@@ -12,6 +12,7 @@ import PurchaseOrdersPage from './pages/purchase-orders/PurchaseOrdersPage';
 import ProductsPage from './pages/products/ProductsPage';
 import SuppliersPage from './pages/suppliers/SuppliersPage';
 import SupplierDetailsPage from './pages/suppliers/SupplierDetailsPage';
+import NotFoundPage from './pages/NotFoundPage';
 
 export default function App() {
   return (
@@ -49,7 +50,7 @@ export default function App() {
             </Route>
           </Route>
 
-          <Route path='*' element={<Navigate to='/dashboard' replace />} />
+          <Route path='*' element={<NotFoundPage />} />
         </Routes>
       </BrowserRouter>
     </AppProviders>

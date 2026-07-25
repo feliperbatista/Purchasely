@@ -22,6 +22,7 @@ import { priorities } from '../../types/priority';
 import RejectModal from '../../components/requisitions/RejectModal';
 import Table from '../../components/common/Table';
 import ConvertToPOModal from '../../components/requisitions/ConvertToPOModal';
+import NotFoundPage from '../NotFoundPage';
 
 export default function RequisitionDetailPage() {
   const { id } = useParams<{ id: string }>();
@@ -95,7 +96,7 @@ export default function RequisitionDetailPage() {
   }
 
   if (!requisition) {
-    return <div>Not found</div>;
+    return <NotFoundPage inline/>;
   }
 
   const total = requisition.lines.reduce(

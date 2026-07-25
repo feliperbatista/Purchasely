@@ -29,6 +29,15 @@ public class SupplierProductRepository(AppDbContext context) : ISupplierProductR
             .FirstOrDefaultAsync(x => x.Id == supplierProductId, cancellationToken);
     }
 
+    public async Task<List<SupplierProduct>> GetProductSuppliersAsync(Guid productId, CancellationToken cancellationToken)
+    {
+        return await context.SupplierProducts
+            .Include(sp => sp.Supplier)
+            .Where(sp => sp.ProductId == productId)
+            .OrderBy(sp => sp.Supplier.Name)
+            .ToListAsync(cancellationToken);
+    }
+
     public async Task<bool> SaveChangesAsync(CancellationToken cancellationToken)
     {
         return await context.SaveChangesAsync(cancellationToken) > 0;

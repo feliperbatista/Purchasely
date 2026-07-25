@@ -38,6 +38,17 @@ public class ProductsController(IMediator mediator) : ControllerBase
         return Ok(result.Value);
     }
 
+    [HttpGet("{id:guid}/suppliers")]
+    public async Task<IActionResult> GetSuppliers(Guid id, CancellationToken cancellationToken)
+    {
+        var result = await mediator.Send(new GetProductSupplierQuery(id), cancellationToken);
+
+        if (!result.IsSuccess)
+            return StatusCode(result.StatusCode, result.Errors);
+
+        return Ok(result.Value);
+    }
+
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] CreateProductCommand command, CancellationToken cancellationToken)
     {

@@ -26,6 +26,7 @@ public class GetRequisitionByIdQueryHandler(
                 requisition.SubmittedAt,
                 requisition.CreatedAt,
                 requisition.Requester.Name,
+                requisition.Requester.Id,
                 requisition.Lines.Select(l => new RequisitionLines(
                     l.Id,
                     l.Product.Name,

@@ -11,6 +11,7 @@ public record RequisitionResponse(
     DateTime? SubmittedAt,
     DateTime CreatedAt,
     string RequesterName,
+    Guid RequesterId,
     IEnumerable<RequisitionLines> Lines,
     IEnumerable<Approvals>? Approvals
 );

@@ -45,6 +45,7 @@ public class GetRequisitionsQueryHandler(
                 r.SubmittedAt,
                 r.CreatedAt,
                 r.Requester.Name,
+                r.Requester.Id,
                 r.Lines.Select(l => new RequisitionLines(
                     l.Id,
                     l.Product.Name,

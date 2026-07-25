@@ -58,6 +58,7 @@ public class CreateRequisitionCommandHandler(
                 requisition.SubmittedAt,
                 requisition.CreatedAt,
                 currentUserService.Name,
+                currentUserService.Id,
                 requisition.Lines.Select(l => new RequisitionLines(
                     l.Id,
                     productMap[l.ProductId].Name,

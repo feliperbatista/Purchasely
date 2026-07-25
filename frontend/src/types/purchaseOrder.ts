@@ -1,4 +1,4 @@
-import type { Status } from "./status";
+import type { Status } from './status';
 
 export interface PurchaseOrderLine {
   id: string;
@@ -23,4 +23,20 @@ export interface PurchaseOrder {
   createdAt: string;
   issuedAt?: string;
   lines: PurchaseOrderLine[];
+}
+
+export interface CreatePOLineRequest {
+  requisitionLineId: string;
+  supplierId: string;
+  unitPrice: number;
+}
+
+export interface ConvertToPORequest {
+  requisitionId: string;
+  lines: CreatePOLineRequest[];
+}
+
+export interface CreatePurchaseOrderResponse {
+  requisitionId: string;
+  purchaseOrders: PurchaseOrder[];
 }

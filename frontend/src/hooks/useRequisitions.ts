@@ -5,6 +5,7 @@ import type {
 } from '../types/requisition';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { requisitionsApi } from '../api/requisitions';
+import type { ConvertToPORequest } from '../types/purchaseOrder';
 
 export function useRequisitions(id?: string) {
   const queryClient = useQueryClient();
@@ -64,9 +65,10 @@ export function useRequisitions(id?: string) {
   });
 
   const convertToPO = useMutation({
-    mutationFn: (requisitionId: string) =>
-      requisitionsApi.convertToPO(requisitionId),
+    mutationFn: (data: ConvertToPORequest) =>
+      requisitionsApi.convertToPO(data),
     onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['requisitions'] });
       queryClient.invalidateQueries({ queryKey: ['requisitions', id] });
       queryClient.invalidateQueries({ queryKey: ['purchase-orders'] });
     },

@@ -1,6 +1,10 @@
 import api from '../lib/axios';
 import type { PagedResult } from '../types/common';
 import type {
+  ConvertToPORequest,
+  CreatePurchaseOrderResponse,
+} from '../types/purchaseOrder';
+import type {
   CreateRequisitionRequest,
   Requisition,
   RequisitionFilters,
@@ -48,8 +52,13 @@ export const requisitionsApi = {
     await api.post(`/api/requisition/${id}/reject`, { reason });
   },
 
-  convertToPO: async (id: string): Promise<{ id: string }> => {
-    const res = await api.post(`/api/requisition/${id}/convert-to-po`);
+  convertToPO: async (
+    data: ConvertToPORequest,
+  ): Promise<CreatePurchaseOrderResponse> => {
+    const res = await api.post(
+      `/api/requisition/${data.requisitionId}/convert-to-po`,
+      data.lines,
+    );
     return res.data;
   },
 };

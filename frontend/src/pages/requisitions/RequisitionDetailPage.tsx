@@ -21,6 +21,7 @@ import InfoItem from '../../components/common/InfoItem';
 import { priorities } from '../../types/priority';
 import RejectModal from '../../components/requisitions/RejectModal';
 import Table from '../../components/common/Table';
+import ConvertToPOModal from '../../components/requisitions/ConvertToPOModal';
 
 export default function RequisitionDetailPage() {
   const { id } = useParams<{ id: string }>();
@@ -33,9 +34,9 @@ export default function RequisitionDetailPage() {
     approve,
     reject,
     removeApproval,
-    convertToPO,
   } = useRequisitions(id);
   const [showRejectModal, setShowRejectModal] = useState(false);
+  const [showConvertModal, setShowConvertModal] = useState(false);
 
   const handleSubmit = (requsitionId: string) => {
     submit.mutate(requsitionId, {
@@ -78,16 +79,6 @@ export default function RequisitionDetailPage() {
     removeApproval.mutate(requsitionId, {
       onSuccess: () => {
         toast.success('Approval removed');
-      },
-      onError: (error) => toast.error(getErrorMessage(error)),
-    });
-  };
-
-  const handleConvertToPO = (requsitionId: string) => {
-    convertToPO.mutate(requsitionId, {
-      onSuccess: (po) => {
-        toast.success('Purchase order created');
-        navigate(`/purchase-orders/${po.id}`);
       },
       onError: (error) => toast.error(getErrorMessage(error)),
     });
@@ -210,8 +201,7 @@ export default function RequisitionDetailPage() {
           <Button
             size='sm'
             icon={<ShoppingCart className='w-4 h-4' />}
-            loading={convertToPO.isPending}
-            onClick={() => handleConvertToPO(id!)}
+            onClick={() => setShowConvertModal(true)}
           >
             Convert to PO
           </Button>
@@ -345,6 +335,14 @@ export default function RequisitionDetailPage() {
           onClose={() => setShowRejectModal(false)}
           onConfirm={(reason) => handleReject({ requisitionId: id!, reason })}
           loading={reject.isPending}
+        />
+      )}
+
+      {showConvertModal && (
+        <ConvertToPOModal
+          requisitionId={requisition.id}
+          lines={requisition.lines}
+          onClose={() => setShowConvertModal(false)}
         />
       )}
     </div>

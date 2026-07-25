@@ -14,3 +14,10 @@ export interface CreateProductRequest {
   description?: string;
   category: string;
 }
+
+export interface SupplierForProduct {
+  supplierId: string;
+  supplierName: string;
+  unitPrice: number;
+}
+

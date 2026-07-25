@@ -37,6 +37,7 @@ public class ProductRepository(AppDbContext context) : IProductRepository
 
         return await query
             .AsNoTracking()
+            .OrderBy(p => p.Name)
             .Skip((page - 1) * pageSize)
             .Take(pageSize)
             .ToListAsync(cancellationToken);

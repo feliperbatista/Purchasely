@@ -26,6 +26,7 @@ public class SupplierRepository(AppDbContext context) : ISupplierRepository
     {
         return await context.Suppliers
             .AsNoTracking()
+            .OrderBy(s => s.Name)
             .Skip((page - 1) * pageSize)
             .Take(pageSize)
             .ToListAsync(cancellationToken);

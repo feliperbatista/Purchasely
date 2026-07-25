@@ -45,12 +45,8 @@ export default function RequisitionsPage() {
           <p>{totalCount} requisitions total</p>
         </div>
         <Button
-          icon={
-            <Plus
-              className='w-4 h-4'
-              onClick={() => navigate('/requisitons/new')}
-            />
-          }
+          icon={<Plus className='w-4 h-4' />}
+          onClick={() => navigate('/requisitions/new')}
         >
           New Requisition
         </Button>

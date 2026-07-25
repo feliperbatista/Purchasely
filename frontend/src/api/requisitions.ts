@@ -1,6 +1,10 @@
 import api from '../lib/axios';
 import type { PagedResult } from '../types/common';
-import type { Requisition, RequisitionFilters } from '../types/requisition';
+import type {
+  CreateRequisitionRequest,
+  Requisition,
+  RequisitionFilters,
+} from '../types/requisition';
 
 export const requisitionsApi = {
   getAll: async (
@@ -21,5 +25,14 @@ export const requisitionsApi = {
   getById: async (id: string): Promise<Requisition> => {
     const res = await api.get(`/api/requisiton/${id}`);
     return res.data;
+  },
+
+  create: async (data: CreateRequisitionRequest): Promise<Requisition> => {
+    const res = await api.post('/api/requisition', data);
+    return res.data;
+  },
+
+  submit: async (id: string): Promise<void> => {
+    await api.post(`/api/requisition/${id}/submit`);
   },
 };

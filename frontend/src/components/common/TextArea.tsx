@@ -17,7 +17,7 @@ const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
           {...props}
           rows={3}
           placeholder={placeholder}
-          className={`w-full px-3.5 py-2.5 text-sm border border-gray-300 rounded-lg outline-none transition focus:ring-2 focus:border-transparent focus:ring-blue-500 resize-none placeholder-gray-400
+          className={`w-full px-3.5 py-2.5 text-sm border border-gray-300 rounded-lg outline-none transition focus:ring-2 focus:border-transparent focus:ring-orange-400 resize-none placeholder-gray-400
           ${className}
           `}
         />

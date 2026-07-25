@@ -5,7 +5,7 @@ import { ChevronDown, Search, X } from 'lucide-react';
 
 type ProductSearchProps = {
   value: string;
-  onChange: (productId: string) => void;
+  onChange: (productId: string, product?: Product) => void;
   error?: string;
   disabled?: boolean;
   initialProduct?: Product;
@@ -28,7 +28,7 @@ export default function ProductSearch({
 
   const handleSelect = (product: Product) => {
     setSelected(product);
-    onChange(product.id);
+    onChange(product.id, product);
     setSearch('');
     setOpen(false);
   };

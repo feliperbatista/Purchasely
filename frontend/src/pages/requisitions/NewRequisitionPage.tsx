@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useRequisitions } from '../../hooks/useRequisitions';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -16,15 +16,23 @@ import Step2 from '../../components/requisitions/Step2';
 
 export default function NewRequisitionPage() {
   const navigate = useNavigate();
-  const { create, submit } = useRequisitions();
+  const { id } = useParams();
+  const {
+    create,
+    submit,
+    requisition,
+    isLoadingRequisition: isLoading,
+    update,
+  } = useRequisitions(id);
   const [step, setStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const form = useForm<CreateRequisitionFormData>({
     resolver: zodResolver(createRequisitionSchema),
     defaultValues: {
-      priority: 'Normal',
-      lines: [
+      priority: requisition?.priority ?? 'Normal',
+      justification: requisition?.justification ?? '',
+      lines: requisition?.lines ?? [
         {
           productId: '',
           productName: '',
@@ -65,6 +73,26 @@ export default function NewRequisitionPage() {
     });
   });
 
+  const handleEdit = form.handleSubmit(async (data) => {
+    update.mutate(
+      { id: id!, data },
+      {
+        onSuccess: () => {
+          toast.success('Requisition successfully updated');
+          navigate('/requisitions');
+        },
+        onError: (error) => toast.error(getErrorMessage(error)),
+      },
+    );
+  });
+
+  if (isLoading) return <div>loading</div>;
+
+  if (id && !requisition) return <div>not found</div>;
+
+  if (requisition && requisition?.status !== 'Draft')
+    navigate(`/requisitions/${requisition?.id}`);
+
   return (
     <div className='space-y-5'>
       <div className='flex items-center gap-3'>
@@ -76,10 +104,12 @@ export default function NewRequisitionPage() {
         </button>
         <div>
           <h1 className='text-lg font-semibold text-gray-900'>
-            New Requisitions
+            {requisition
+              ? `Edit Requisition #${requisition.number}`
+              : 'New Requisitions'}
           </h1>
           <p className='text-sm text-gray-500'>
-            Fill in the details to create a purchase requisition
+            {`Fill in the details to ${requisition ? 'update' : 'create'} a purchase requisition`}
           </p>
         </div>
       </div>
@@ -94,9 +124,12 @@ export default function NewRequisitionPage() {
             form={form}
             onBack={() => setStep(1)}
             onSaveDraft={handleSaveDraft}
+            onUpdate={handleEdit}
             onSubmit={handleSubmit}
             isSaving={create.isPending && !isSubmitting}
+            isSavingUpdate={update.isPending}
             isSubmitting={isSubmitting}
+            editting={!!requisition}
           />
         )}
       </div>

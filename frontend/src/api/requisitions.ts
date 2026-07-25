@@ -61,4 +61,12 @@ export const requisitionsApi = {
     );
     return res.data;
   },
+
+  update: async (
+    id: string,
+    data: CreateRequisitionRequest,
+  ): Promise<Requisition> => {
+    const res = await api.put(`/api/requisition/${id}`, data);
+    return res.data;
+  },
 };

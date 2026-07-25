@@ -65,12 +65,25 @@ export function useRequisitions(id?: string) {
   });
 
   const convertToPO = useMutation({
-    mutationFn: (data: ConvertToPORequest) =>
-      requisitionsApi.convertToPO(data),
+    mutationFn: (data: ConvertToPORequest) => requisitionsApi.convertToPO(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['requisitions'] });
       queryClient.invalidateQueries({ queryKey: ['requisitions', id] });
       queryClient.invalidateQueries({ queryKey: ['purchase-orders'] });
+    },
+  });
+
+  const update = useMutation({
+    mutationFn: ({
+      id,
+      data,
+    }: {
+      id: string;
+      data: CreateRequisitionRequest;
+    }) => requisitionsApi.update(id, data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['requisitions'] });
+      queryClient.invalidateQueries({ queryKey: ['requisitions', id] });
     },
   });
 
@@ -103,5 +116,6 @@ export function useRequisitions(id?: string) {
     reject,
     removeApproval,
     convertToPO,
+    update
   };
 }

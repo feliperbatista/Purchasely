@@ -30,6 +30,10 @@ export default function App() {
                 element={<NewRequisitionPage />}
               />
               <Route
+                path='/requisitions/:id/edit'
+                element={<NewRequisitionPage />}
+              />
+              <Route
                 path='/requisitions/:id'
                 element={<RequisitionDetailPage />}
               />

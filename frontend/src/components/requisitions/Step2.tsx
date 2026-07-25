@@ -13,8 +13,11 @@ type Props = {
   onBack: () => void;
   onSaveDraft: () => void;
   onSubmit: () => void;
+  onUpdate: () => void;
   isSaving: boolean;
+  isSavingUpdate: boolean;
   isSubmitting: boolean;
+  editting: boolean;
 };
 
 export default function Step2({
@@ -22,8 +25,11 @@ export default function Step2({
   onBack,
   onSaveDraft,
   onSubmit,
+  onUpdate,
   isSaving,
+  isSavingUpdate,
   isSubmitting,
+  editting,
 }: Props) {
   const {
     control,
@@ -95,6 +101,17 @@ export default function Step2({
                     }
                   }}
                   error={errors.lines?.[index]?.productId?.message}
+                  initialProduct={
+                    field.productId
+                      ? {
+                          id: field.productId,
+                          name: field.productName,
+                          sku: '',
+                          category: '',
+                          createdAt: '',
+                        }
+                      : undefined
+                  }
                 />
               )}
             />
@@ -155,21 +172,34 @@ export default function Step2({
           Back
         </Button>
         <div className='flex gap-2'>
-          <Button
-            variant='secondary'
-            icon={<Save className='w-4 h-4' />}
-            loading={isSaving}
-            onClick={onSaveDraft}
-          >
-            Save as Draft
-          </Button>
-          <Button
-            icon={<Save className='w-4 h-4' />}
-            loading={isSubmitting}
-            onClick={onSubmit}
-          >
-            Submit
-          </Button>
+          {!editting && (
+            <Button
+              variant='secondary'
+              icon={<Save className='w-4 h-4' />}
+              loading={isSaving}
+              onClick={onSaveDraft}
+            >
+              Save as Draft
+            </Button>
+          )}
+          {!editting && (
+            <Button
+              icon={<Save className='w-4 h-4' />}
+              loading={isSubmitting}
+              onClick={onSubmit}
+            >
+              Submit
+            </Button>
+          )}
+          {editting && (
+            <Button
+              icon={<Save className='w-4 h-4' />}
+              loading={isSavingUpdate}
+              onClick={onUpdate}
+            >
+              Save
+            </Button>
+          )}
         </div>
       </div>
     </div>

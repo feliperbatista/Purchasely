@@ -21,7 +21,7 @@ export default function RequisitionCard({ requisition, onClick }: Props) {
       <div className='flex items-start justify-between gap-2'>
         <div>
           <p className='text-xs text-gray-400 font-mono'>
-            ${requisition.number}
+            #{requisition.number}
           </p>
           <p className='text-sm font-semibold text-gray-900 mt-0.5 line-clamp-1'>
             {requisition.justification ?? 'No justification'}

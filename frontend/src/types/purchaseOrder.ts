@@ -40,3 +40,12 @@ export interface CreatePurchaseOrderResponse {
   requisitionId: string;
   purchaseOrders: PurchaseOrder[];
 }
+
+export interface PurchaseOrderFilters {
+  status?: Status;
+  supplierId?: string;
+  from?: string;
+  to?: string;
+  page?: number;
+  pageSize?: number;
+}

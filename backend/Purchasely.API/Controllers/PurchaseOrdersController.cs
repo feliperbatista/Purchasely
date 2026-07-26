@@ -18,12 +18,13 @@ public class PurchaseOrdersController(IMediator mediator) : ControllerBase
         [FromQuery] PurchaseOrderStatus? status,
         [FromQuery] DateTime? from,
         [FromQuery] DateTime? to,
+        [FromQuery] Guid? supplierId,
         [FromQuery] int page = 1,
         [FromQuery] int pageSize = 20,
         CancellationToken cancellationToken = default
     )
     {
-        var result = await mediator.Send(new GetPurchaseOrdersQuery(page, pageSize, status, from, to), cancellationToken);
+        var result = await mediator.Send(new GetPurchaseOrdersQuery(page, pageSize, status, from, to, supplierId), cancellationToken);
 
         if (!result.IsSuccess)
             return StatusCode(result.StatusCode, result.Errors);

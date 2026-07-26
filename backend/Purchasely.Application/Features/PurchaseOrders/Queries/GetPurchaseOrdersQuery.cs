@@ -11,24 +11,34 @@ public record GetPurchaseOrdersQuery(
     int PageSize = 20,
     PurchaseOrderStatus? Status = null,
     DateTime? From = null,
-    DateTime? To = null
+    DateTime? To = null,
+    Guid? SupplierId = null
 ) : IRequest<Result<PaginatedResponse<PurchaseOrderResponse>>>;
 
 public class GetPurchaseOrdersQueryHandler(
-    IPurchaseOrderRepository repository
+    IPurchaseOrderRepository purchaseOrderRepo,
+    ISupplierRepository supplierRepo
 ) : IRequestHandler<GetPurchaseOrdersQuery, Result<PaginatedResponse<PurchaseOrderResponse>>>
 {
     public async Task<Result<PaginatedResponse<PurchaseOrderResponse>>> Handle(GetPurchaseOrdersQuery request, CancellationToken cancellationToken)
     {
-        var purchaseOrders = await repository.GetAllAsync(
+        if (request.SupplierId is not null)
+        {
+            var supplier = await supplierRepo.GetByIdAsync(request.SupplierId.Value, cancellationToken);
+            if (supplier is null)
+                return Result<PaginatedResponse<PurchaseOrderResponse>>.Failure(404, "Supplier not found");
+        }
+
+        var purchaseOrders = await purchaseOrderRepo.GetAllAsync(
             request.Page,
             request.PageSize,
             request.Status,
             request.From,
             request.To,
+            request.SupplierId,
             cancellationToken);
         
-        var poCount = await repository.CountAsync(cancellationToken);
+        var poCount = await purchaseOrderRepo.CountAsync(cancellationToken);
         
         return Result<PaginatedResponse<PurchaseOrderResponse>>.Success(new PaginatedResponse<PurchaseOrderResponse>(
             Items: [.. purchaseOrders.Select(po => new PurchaseOrderResponse(

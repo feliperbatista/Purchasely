@@ -12,6 +12,7 @@ public interface IPurchaseOrderRepository
         PurchaseOrderStatus? status = null,
         DateTime? from = null,
         DateTime? to = null,
+        Guid? supplierId = null,
         CancellationToken cancellationToken = default
     );
     Task<int> CountAsync(CancellationToken cancellationToken);

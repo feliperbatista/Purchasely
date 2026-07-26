@@ -24,13 +24,15 @@ public class PurchaseOrderRepository(AppDbContext context) : IPurchaseOrderRepos
         return await context.PurchaseOrders.CountAsync(p => status.Contains(p.Status), cancellationToken);
     }
 
-    public async Task<List<PurchaseOrder>> GetAllAsync(int page, int pageSize, PurchaseOrderStatus? status = null, DateTime? from = null, DateTime? to = null, CancellationToken cancellationToken = default)
+    public async Task<List<PurchaseOrder>> GetAllAsync(int page, int pageSize, PurchaseOrderStatus? status = null, DateTime? from = null, 
+    DateTime? to = null, Guid? supplierId = null, CancellationToken cancellationToken = default)
     {
         return await context.PurchaseOrders
             .AsNoTracking()
             .Where(r => !status.HasValue || r.Status == status.Value)
             .Where(r => !from.HasValue || r.CreatedAt >= from.Value.Date)
             .Where(r => !to.HasValue || r.CreatedAt <= to.Value.Date.AddDays(1).AddTicks(-1))
+            .Where(r => !supplierId.HasValue || r.SupplierId == supplierId.Value)
             .Skip((page - 1) * pageSize)
             .Take(pageSize)
             .Include(p => p.Supplier)

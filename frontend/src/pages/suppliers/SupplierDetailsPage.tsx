@@ -17,6 +17,7 @@ import type { Product } from '../../types/product';
 import { toast } from 'sonner';
 import { getErrorMessage } from '../../lib/errors';
 import NotFoundPage from '../NotFoundPage';
+import SupplierDetailsSkeleton from '../../components/suppliers/SupplierDetailsSkeleton';
 
 export default function SupplierDetailsPage() {
   const { id } = useParams();
@@ -83,7 +84,12 @@ export default function SupplierDetailsPage() {
     });
   };
 
-  if (id && !supplier) return <NotFoundPage inline/>;
+  if (isLoading)
+    return (
+      <SupplierDetailsSkeleton/>
+    );
+
+  if (id && !supplier) return <NotFoundPage inline />;
 
   return (
     <div className='space-y-5'>

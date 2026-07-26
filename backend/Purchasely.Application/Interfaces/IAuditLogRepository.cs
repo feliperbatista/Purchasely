@@ -5,5 +5,5 @@ namespace Purchasely.Application.Interfaces;
 public interface IAuditLogRepository
 {
     Task AddAsync(AuditLog log, CancellationToken cancellationToken);
-    Task<bool> SaveChangesAsync(CancellationToken cancellationToken);
+    Task SaveChangesAsync(CancellationToken cancellationToken);
 }

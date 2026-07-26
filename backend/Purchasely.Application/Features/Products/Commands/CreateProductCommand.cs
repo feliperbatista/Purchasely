@@ -22,10 +22,8 @@ public class CreateProductCommandHandler(
         var product = Product.Create(request.SKU, request.Name, request.Description, request.Category);
         
         await productRepo.AddAsync(product, cancellationToken);
-        var saved = await productRepo.SaveChangesAsync(cancellationToken);
+        await productRepo.SaveChangesAsync(cancellationToken);
 
-        return saved 
-            ? Result<ProductResponse>.Success(new ProductResponse(product.Id, product.SKU, product.Name, product.Description, product.Category, product.CreatedAt))
-            : Result<ProductResponse>.Failure(400, "Failed saving in database");
+        return Result<ProductResponse>.Success(new ProductResponse(product.Id, product.SKU, product.Name, product.Description, product.Category, product.CreatedAt));
     }
 }

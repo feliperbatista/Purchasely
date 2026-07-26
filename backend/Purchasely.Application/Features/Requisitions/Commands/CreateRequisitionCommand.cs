@@ -46,10 +46,9 @@ public class CreateRequisitionCommandHandler(
         );
 
         await requisitionRepo.AddAsync(requisition, cancellationToken);
-        var saved = await requisitionRepo.SaveChangesAsync(cancellationToken);
+        await requisitionRepo.SaveChangesAsync(cancellationToken);
 
-        return saved 
-            ? Result<RequisitionResponse>.Success(new RequisitionResponse(
+        return Result<RequisitionResponse>.Success(new RequisitionResponse(
                 requisition.Id,
                 requisition.Number,
                 requisition.Status,
@@ -66,7 +65,6 @@ public class CreateRequisitionCommandHandler(
                     l.QuantityRequested,
                     l.EstimatedUnitPrice
                 )),
-                null))
-            : Result<RequisitionResponse>.Failure(400, "Failed saving in database");
+                null));
     }
 }

@@ -29,10 +29,8 @@ public class CreateUserCommandHandler(
         var user = User.Create(request.Name, request.Email, hash, request.Role);
         
         await repository.AddAsync(user, cancellationToken);
-        bool saved = await repository.SaveChangesAsync(cancellationToken);
+        await repository.SaveChangesAsync(cancellationToken);
 
-        return saved 
-            ? Result<UserResponse>.Success(new UserResponse(user.Id, user.Name, user.Email, user.Role))
-            : Result<UserResponse>.Failure(400, "Failed saving in database");
+        return Result<UserResponse>.Success(new UserResponse(user.Id, user.Name, user.Email, user.Role));
     }
 }

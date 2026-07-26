@@ -19,10 +19,8 @@ public class DeleteProductCommandHandler(
             return Result<Unit>.Failure(404, "Product not found");
 
         repository.Delete(product);
-        bool saved = await repository.SaveChangesAsync(cancellationToken);
+        await repository.SaveChangesAsync(cancellationToken);
         
-        return saved 
-            ? Result<Unit>.Success(Unit.Value)
-            : Result<Unit>.Failure(400, "Failed saving");
+        return Result<Unit>.Success(Unit.Value);
     }
 }

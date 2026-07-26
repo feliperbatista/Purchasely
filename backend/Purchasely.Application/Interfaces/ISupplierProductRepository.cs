@@ -9,5 +9,5 @@ public interface ISupplierProductRepository
     Task<List<SupplierProduct>> GetProductSuppliersAsync(Guid productId, CancellationToken cancellationToken);
     Task AddAsync(SupplierProduct product, CancellationToken cancellationToken);
     void Delete(SupplierProduct product);
-    Task<bool> SaveChangesAsync(CancellationToken cancellationToken);
+    Task SaveChangesAsync(CancellationToken cancellationToken);
 }

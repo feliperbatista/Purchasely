@@ -11,5 +11,5 @@ public interface ISupplierRepository
     Task<List<Supplier>> GetByIdsAsync(List<Guid> ids, CancellationToken cancellationToken);
     Task AddAsync(Supplier supplier, CancellationToken cancellationToken);
     void Delete(Supplier supplier);
-    Task<bool> SaveChangesAsync(CancellationToken cancellationToken);
+    Task SaveChangesAsync(CancellationToken cancellationToken);
 }

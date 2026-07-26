@@ -10,5 +10,5 @@ public interface IProductRepository
     Task<int> CountAsync(CancellationToken cancellationToken);
     Task AddAsync(Product product, CancellationToken cancellationToken);
     void Delete(Product product);
-    Task<bool> SaveChangesAsync(CancellationToken cancellationToken);
+    Task SaveChangesAsync(CancellationToken cancellationToken);
 }

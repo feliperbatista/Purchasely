@@ -27,10 +27,9 @@ public class CreateSupplierCommandHandler(
         var supplier = Supplier.Create(request.Name, request.Email, request.Phone, request.Address, request.TaxNumber);
         
         await repository.AddAsync(supplier, cancellationToken);
-        bool saved = await repository.SaveChangesAsync(cancellationToken);
+        await repository.SaveChangesAsync(cancellationToken);
 
-        return saved
-            ? Result<SupplierDetailsResponse>.Success(new SupplierDetailsResponse(
+        return Result<SupplierDetailsResponse>.Success(new SupplierDetailsResponse(
                 supplier.Id,
                 supplier.Name,
                 supplier.Email,
@@ -40,7 +39,6 @@ public class CreateSupplierCommandHandler(
                 supplier.IsActive,
                 supplier.CreatedAt,
                 Products: []
-              ))
-            : Result<SupplierDetailsResponse>.Failure(400, "Failed saving in database");
+              ));
     }
 }

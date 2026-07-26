@@ -75,10 +75,7 @@ public class ReceivePurchaseOrderCommandHandler(
         
         purchaseOrder.RecordReceipt([.. request.Lines.Select(l => (l.Id, l.Quantity))]);
         
-        var saved = await purchaseOrderRepo.SaveChangesAsync(cancellationToken);
-
-        if (!saved)
-            return Result<Unit>.Failure(400, "Failed saving in database");
+        await purchaseOrderRepo.SaveChangesAsync(cancellationToken);
 
         await mediator.Publish(new PurchaseOrderReceivedEvent(
             request.Id,

@@ -54,8 +54,8 @@ public class SupplierRepository(AppDbContext context) : ISupplierRepository
             .FirstOrDefaultAsync(x => x.TaxNumber == taxNumber, cancellationToken);
     }
 
-    public async Task<bool> SaveChangesAsync(CancellationToken cancellationToken)
+    public async Task SaveChangesAsync(CancellationToken cancellationToken)
     {
-        return await context.SaveChangesAsync(cancellationToken) > 0;
+        await context.SaveChangesAsync(cancellationToken);
     }
 }

@@ -27,10 +27,7 @@ public class RemoveApprovalRequisitionCommandHandler(
             return Result<Unit>.Failure(400, $"You did not approve this requisition");
 
         requisition.RemoveApproval(approval);
-        var saved = await requisitionRepo.SaveChangesAsync(cancellationToken);
-
-        if (!saved)
-            return Result<Unit>.Failure(400, "Failed saving in database");
+        await requisitionRepo.SaveChangesAsync(cancellationToken);
 
         await mediator.Publish(new RequisitionApprovalRemovedEvent(
             request.Id,

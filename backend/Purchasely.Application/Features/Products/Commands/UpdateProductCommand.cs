@@ -24,10 +24,8 @@ public class UpdateProductCommandHandler(
 
         product.Update(request.SKU, request.Name, request.Description, request.Category);
         
-        bool saved = await repository.SaveChangesAsync(cancellationToken);
+        await repository.SaveChangesAsync(cancellationToken);
         
-        return saved
-            ? Result<Unit>.Success(Unit.Value)
-            : Result<Unit>.Failure(400, "Failed saving in database");
+        return Result<Unit>.Success(Unit.Value);
     }
 }

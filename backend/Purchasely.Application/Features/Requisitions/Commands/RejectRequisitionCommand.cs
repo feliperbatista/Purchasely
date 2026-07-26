@@ -35,10 +35,7 @@ public class RejectRequisitionCommandHandler(
         }
 
         requisition.Reject();
-        var saved = await requisitionRepo.SaveChangesAsync(cancellationToken);
-
-        if (!saved)
-            return Result<Unit>.Failure(400, "Failed saving in database");
+        await requisitionRepo.SaveChangesAsync(cancellationToken);
 
         await mediator.Publish(new RequisitionRejectedEvent(
             request.Id,

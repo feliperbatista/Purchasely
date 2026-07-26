@@ -53,10 +53,9 @@ public class UpdateRequisitionCommandHandler(
             ))
             .ToList();
         requisition.Update(request.Priority, request.Justification, lines);
-        var saved = await requisitionRepo.SaveChangesAsync(cancellationToken);
+        await requisitionRepo.SaveChangesAsync(cancellationToken);
 
-        return saved 
-            ? Result<RequisitionResponse>.Success(new RequisitionResponse(
+        return Result<RequisitionResponse>.Success(new RequisitionResponse(
                 requisition.Id,
                 requisition.Number,
                 requisition.Status,
@@ -77,7 +76,6 @@ public class UpdateRequisitionCommandHandler(
                     a.Id,
                     a.Approver.Name,
                     a.ActionedAt
-                ))))
-            : Result<RequisitionResponse>.Failure(400, "Failed saving in database");
+                ))));
     }
 }

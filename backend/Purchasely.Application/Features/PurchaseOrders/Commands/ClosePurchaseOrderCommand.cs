@@ -32,10 +32,7 @@ public class ClosePurchaseOrderCommandHandler(
 
         purchaseOrder.Close();
         
-        var saved = await purchaseOrderRepo.SaveChangesAsync(cancellationToken);
-
-        if (!saved)
-            return Result<Unit>.Failure(400, "Failed saving in database");
+        await purchaseOrderRepo.SaveChangesAsync(cancellationToken);
 
         await mediator.Publish(new PurchaseOrderClosedEvent(
             request.Id,

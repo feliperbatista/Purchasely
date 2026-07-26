@@ -76,10 +76,7 @@ public class ConvertRequisitionToPOCommandHandler(
 
         requisition.ConvertToPO();
         
-        var saved = await requisitionRepo.SaveChangesAsync(cancellationToken);
-
-        if (!saved)
-            return Result<CreatePurchaseOrderResponse>.Failure(400, "Failed saving in database");
+        await requisitionRepo.SaveChangesAsync(cancellationToken);
 
         await mediator.Publish(new RequisitionConvertedToPOEvent(
             requisition.Id,

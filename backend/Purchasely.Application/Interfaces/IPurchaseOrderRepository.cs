@@ -18,5 +18,5 @@ public interface IPurchaseOrderRepository
     Task<int> CountByStatusAsync(PurchaseOrderStatus[] status, CancellationToken cancellationToken);
     Task<decimal> TotalSpendThisMonthAsync(CancellationToken cancellationToken);
     Task AddAsync(PurchaseOrder purchaseOrder, CancellationToken cancellationToken);
-    Task<bool> SaveChangesAsync(CancellationToken cancellationToken);
+    Task SaveChangesAsync(CancellationToken cancellationToken);
 }

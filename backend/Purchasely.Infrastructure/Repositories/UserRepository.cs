@@ -32,8 +32,8 @@ public class UserRepository(AppDbContext context) : IUserRepository
             .ToListAsync(cancellationToken);
     }
 
-    public async Task<bool> SaveChangesAsync(CancellationToken cancellationToken)
+    public async Task SaveChangesAsync(CancellationToken cancellationToken)
     {
-        return await context.SaveChangesAsync(cancellationToken) > 0;
+        await context.SaveChangesAsync(cancellationToken);
     }
 }

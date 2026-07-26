@@ -19,8 +19,8 @@ public class DeleteSupplierCommandHandler(
             return Result<Unit>.Failure(404, "Supplier not found");
 
         repository.Delete(supplier);
-        bool saved = await repository.SaveChangesAsync(cancellationToken);
+        await repository.SaveChangesAsync(cancellationToken);
         
-        return saved ? Result<Unit>.Success(Unit.Value) : Result<Unit>.Failure(400, "Failed saving in database");;
+        return Result<Unit>.Success(Unit.Value);
     }
 }

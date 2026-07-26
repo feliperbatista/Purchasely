@@ -35,10 +35,8 @@ public class CreateSupplierProductCommandHandler(
         var supplierProduct = SupplierProduct.Create(request.SupplierId, request.ProductId, request.UnitPrice);
         
         await supplierProductRepo.AddAsync(supplierProduct, cancellationToken);
-        bool saved = await supplierProductRepo.SaveChangesAsync(cancellationToken);
+        await supplierProductRepo.SaveChangesAsync(cancellationToken);
 
-        return saved 
-            ? Result<SupplierProductResponse>.Success(new SupplierProductResponse(supplier.Id, product.Id, supplierProduct.UnitPrice))
-            : Result<SupplierProductResponse>.Failure(400, "Failed saving in database");
+        return Result<SupplierProductResponse>.Success(new SupplierProductResponse(supplier.Id, product.Id, supplierProduct.UnitPrice));
     }
 }

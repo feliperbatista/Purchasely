@@ -32,10 +32,7 @@ public class SubmitRequisitionCommandHandler(
         }
 
         requisition.Submit();
-        var saved = await requisitionRepo.SaveChangesAsync(cancellationToken);
-
-        if (!saved)
-            return Result<Unit>.Failure(400, "Failed saving in database");
+        await requisitionRepo.SaveChangesAsync(cancellationToken);
 
         var approvers = await userRepository.GetByRoleAsync(UserRole.Manager, cancellationToken);
         var approversEmail = approvers.Select(a => a.Email).ToList();

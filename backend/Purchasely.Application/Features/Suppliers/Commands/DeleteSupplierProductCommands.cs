@@ -27,10 +27,8 @@ public class DeleteSupplierProductCommandHandler(
             return Result<Unit>.Failure(404, "Product does not exist");
 
         supplierProductRepo.Delete(product);
-        bool saved = await supplierProductRepo.SaveChangesAsync(cancellationToken);
+        await supplierProductRepo.SaveChangesAsync(cancellationToken);
 
-        return saved 
-            ? Result<Unit>.Success(Unit.Value)
-            : Result<Unit>.Failure(400, "Failed saving in database");
+        return Result<Unit>.Success(Unit.Value);
     }
 }

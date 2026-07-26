@@ -50,9 +50,9 @@ public class PurchaseOrderRepository(AppDbContext context) : IPurchaseOrderRepos
             .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
     }
 
-    public async Task<bool> SaveChangesAsync(CancellationToken cancellationToken)
+    public async Task SaveChangesAsync(CancellationToken cancellationToken)
     {
-        return await context.SaveChangesAsync(cancellationToken) > 0;
+        await context.SaveChangesAsync(cancellationToken);
     }
 
     public async Task<decimal> TotalSpendThisMonthAsync(CancellationToken cancellationToken)

@@ -22,41 +22,41 @@ export const requisitionsApi = {
     params.set('page', String(filters.page ?? 1));
     params.set('pageSize', String(filters.pageSize ?? 12));
 
-    const res = await api.get(`/api/requisition?${params}`);
+    const res = await api.get(`/api/requisitions?${params}`);
     return res.data;
   },
 
   getById: async (id: string): Promise<Requisition> => {
-    const res = await api.get(`/api/requisition/${id}`);
+    const res = await api.get(`/api/requisitions/${id}`);
     return res.data;
   },
 
   create: async (data: CreateRequisitionRequest): Promise<Requisition> => {
-    const res = await api.post('/api/requisition', data);
+    const res = await api.post('/api/requisitions', data);
     return res.data;
   },
 
   submit: async (id: string): Promise<void> => {
-    await api.post(`/api/requisition/${id}/submit`);
+    await api.post(`/api/requisitions/${id}/submit`);
   },
 
   approve: async (id: string): Promise<void> => {
-    await api.post(`/api/requisition/${id}/approve`);
+    await api.post(`/api/requisitions/${id}/approve`);
   },
 
   removeApproval: async (id: string): Promise<void> => {
-    await api.post(`/api/requisition/${id}/remove-approval`);
+    await api.post(`/api/requisitions/${id}/remove-approval`);
   },
 
   reject: async (id: string, reason: string): Promise<void> => {
-    await api.post(`/api/requisition/${id}/reject`, { reason });
+    await api.post(`/api/requisitions/${id}/reject`, { reason });
   },
 
   convertToPO: async (
     data: ConvertToPORequest,
   ): Promise<CreatePurchaseOrderResponse> => {
     const res = await api.post(
-      `/api/requisition/${data.requisitionId}/convert-to-po`,
+      `/api/requisitions/${data.requisitionId}/convert-to-po`,
       data.lines,
     );
     return res.data;
@@ -66,7 +66,7 @@ export const requisitionsApi = {
     id: string,
     data: CreateRequisitionRequest,
   ): Promise<Requisition> => {
-    const res = await api.put(`/api/requisition/${id}`, data);
+    const res = await api.put(`/api/requisitions/${id}`, data);
     return res.data;
   },
 };

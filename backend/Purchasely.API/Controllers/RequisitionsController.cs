@@ -11,7 +11,7 @@ namespace Purchasely.API.Controllers;
 [ApiController]
 [Authorize]
 [Route("api/[controller]")]
-public class RequisitionController(IMediator mediator) : ControllerBase
+public class RequisitionsController(IMediator mediator) : ControllerBase
 {
     [HttpGet]
     public async Task<IActionResult> GetAll(

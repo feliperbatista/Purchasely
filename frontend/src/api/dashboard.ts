@@ -11,7 +11,7 @@ export const dashboardApi = {
   },
 
   getRecentRequisitions: async (): Promise<Requisition[]> => {
-    const res = await api.get<PagedResult<Requisition>>('/api/requisition?page=1&pageSize=5');
+    const res = await api.get<PagedResult<Requisition>>('/api/requisitions?page=1&pageSize=5');
     return res.data.items;
   },
 

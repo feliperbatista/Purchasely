@@ -10,22 +10,25 @@ import {
 import { useAuth } from '../../hooks/useAuth';
 import { NavLink } from 'react-router-dom';
 
-const links = [
-  { to: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
-  { to: '/requisitions', label: 'Requisitions', icon: ClipboardList },
-  { to: '/purchase-orders', label: 'Purchase Orders', icon: ShoppingCart },
-  { to: '/products', label: 'Products', icon: Package },
-  { to: '/suppliers', label: 'Suppliers', icon: Truck },
-  { to: '/users', label: 'Users', icon: Users },
-];
-
 export default function Sidebar() {
   const { logout, user } = useAuth();
+  const links = [
+    { to: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
+    { to: '/requisitions', label: 'Requisitions', icon: ClipboardList },
+    { to: '/purchase-orders', label: 'Purchase Orders', icon: ShoppingCart },
+    { to: '/products', label: 'Products', icon: Package },
+    { to: '/suppliers', label: 'Suppliers', icon: Truck },
+    ...(user?.role === 'Admin'
+      ? [{ to: '/users', label: 'Users', icon: Users }]
+      : []),
+  ];
 
   return (
     <aside className='fixed top-0 left-0 h-screen w-56 bg-white border-r border-gray-100 flex flex-col'>
       <div className='px-5 py-5 border-b border-gray-100'>
-        <h1 className='text-2xl font-satisfy font-bold text-gray-900'>Purchasely</h1>
+        <h1 className='text-2xl font-satisfy font-bold text-gray-900'>
+          Purchasely
+        </h1>
         <p className='text-xs text-gray-400 mt-0.5 truncate'>{user?.email}</p>
       </div>
 

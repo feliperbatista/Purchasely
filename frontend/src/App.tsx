@@ -14,6 +14,7 @@ import SuppliersPage from './pages/suppliers/SuppliersPage';
 import SupplierDetailsPage from './pages/suppliers/SupplierDetailsPage';
 import NotFoundPage from './pages/NotFoundPage';
 import UsersPage from './pages/users/UsersPage';
+import AdminRoute from './components/common/AdminRoute';
 
 export default function App() {
   return (
@@ -48,7 +49,10 @@ export default function App() {
               <Route path='/suppliers' element={<SuppliersPage />} />
               <Route path='/suppliers/new' element={<SupplierDetailsPage />} />
               <Route path='/suppliers/:id' element={<SupplierDetailsPage />} />
-              <Route path='/users' element={<UsersPage />} />
+
+              <Route element={<AdminRoute />}>
+                <Route path='/users' element={<UsersPage />} />
+              </Route>
             </Route>
           </Route>
 

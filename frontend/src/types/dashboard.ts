@@ -1,6 +1,6 @@
 export interface DashboardStats {
   totalRequisitions: number;
   pendingApprovals: number;
-  openPurchaseOrders: number;
-  totalSpendThisMonth: number;
+  openPOs: number;
+  totalSpend: number;
 }

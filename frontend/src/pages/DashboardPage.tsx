@@ -42,13 +42,13 @@ export default function DashboardPage() {
             />
             <StatCard
               label='Open Purchase Orders'
-              value={stats?.openPurchaseOrders ?? 0}
+              value={stats?.openPOs ?? 0}
               icon={<ShoppingCart className='w-5 h-5 text-purple-600' />}
               color='bg-purple-50'
             />
             <StatCard
               label='Total Spend This Month'
-              value={`$${(stats?.totalSpendThisMonth ?? 0).toLocaleString()}`}
+              value={`$${(stats?.totalSpend ?? 0).toLocaleString()}`}
               icon={<DollarSign className='w-5 h-5 text-green-600' />}
               color='bg-green-50'
             />

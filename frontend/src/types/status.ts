@@ -25,7 +25,7 @@ export const statuses = {
   },
   PartiallyReceived: {
     label: 'Partially Received',
-    style: 'bg-orange-100 text-blue-700',
+    style: 'bg-orange-100 text-orange-700',
   },
   Received: {
     label: 'Received',
@@ -33,7 +33,7 @@ export const statuses = {
   },
   Closed: {
     label: 'Closed',
-    style: 'bg-gray-100 text-gray-600',
+    style: 'bg-purple-100 text-purple-600',
   },
   Cancelled: {
     label: 'Cancelled',

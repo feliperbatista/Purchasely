@@ -29,8 +29,10 @@ export const purchaseOrdersApi = {
     await api.post(`/api/purchaseorders/${id}/issue`);
   },
 
-  receive: async (id: string): Promise<void> => {
-    await api.post(`/api/purchaseorders/${id}/receive`);
+  receive: async (id: string, data: FormData): Promise<void> => {
+    await api.post(`/api/purchaseorders/${id}/receive`, data, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    });
   },
 
   close: async (id: string): Promise<void> => {

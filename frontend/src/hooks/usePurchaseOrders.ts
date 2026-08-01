@@ -27,9 +27,10 @@ export function usePurchaseOrders(id?: string) {
   });
 
   const receive = useMutation({
-    mutationFn: (poId: string) => purchaseOrdersApi.receive(poId),
+    mutationFn: ({ poId, data }: { poId: string; data: FormData }) =>
+      purchaseOrdersApi.receive(poId, data),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['purchase-orders'] });
+      queryClient.invalidateQueries({ queryKey: ['purchase-orders', id] });
     },
   });
 

@@ -18,11 +18,14 @@ export interface PurchaseOrder {
   requisitionId: string;
   status: Status;
   subtotal: number;
+  createdBy: string;
   taxAmount: number;
   totalAmount: number;
   createdAt: string;
   issuedAt?: string;
+  cancellationReason?: string;
   lines: PurchaseOrderLine[];
+  documents: PurchaseOrderDocuments[];
 }
 
 export interface CreatePOLineRequest {
@@ -48,4 +51,12 @@ export interface PurchaseOrderFilters {
   to?: string;
   page?: number;
   pageSize?: number;
+}
+
+export interface PurchaseOrderDocuments {
+  id: string;
+  fileName: string;
+  contentType: string;
+  blobUrl: string;
+  uploadedAt: string;
 }

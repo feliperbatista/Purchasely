@@ -28,6 +28,7 @@ public class GetPurchaseOrderByIdQueryHandler(
                 po.SubTotal,
                 po.TaxAmount,
                 po.TotalAmount,
+                po.CancellationReason,
                 po.CreatedAt,
                 po.IssuedAt,
                 [.. po.Lines.Select(l => new PurchaseOrderLineResponse(

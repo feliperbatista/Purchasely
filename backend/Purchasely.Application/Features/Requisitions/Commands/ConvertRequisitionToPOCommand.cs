@@ -97,6 +97,7 @@ public class ConvertRequisitionToPOCommandHandler(
                     po.SubTotal,
                     po.TaxAmount,
                     po.TotalAmount,
+                    null,
                     po.CreatedAt,
                     po.IssuedAt,
                     [.. po.Lines.Select(l => new PurchaseOrderLineResponse(

@@ -22,9 +22,17 @@ public class SupplierRepository(AppDbContext context) : ISupplierRepository
         context.Suppliers.Remove(supplier);
     }
 
-    public async Task<List<Supplier>> GetAllAsync(int page, int pageSize, CancellationToken cancellationToken)
+    public async Task<List<Supplier>> GetAllAsync(int page, int pageSize, string? search, CancellationToken cancellationToken)
     {
-        return await context.Suppliers
+        var query = context.Suppliers.AsQueryable();
+
+        if (!string.IsNullOrEmpty(search))
+        {
+            var term = $"%{search}%";
+            query = query.Where(s => EF.Functions.ILike(s.Name, term));
+        }
+
+        return await query
             .AsNoTracking()
             .OrderBy(s => s.Name)
             .Skip((page - 1) * pageSize)

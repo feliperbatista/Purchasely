@@ -7,7 +7,8 @@ namespace Purchasely.Application.Features.Suppliers.Queries;
 
 public record GetSuppliersQuery(
     int Page = 1,
-    int PageSize = 20
+    int PageSize = 20,
+    string? Search = null
 ) : IRequest<Result<PaginatedResponse<SupplierListResponse>>>;
 
 public class GetSuppliersQueryHandler(
@@ -16,7 +17,7 @@ public class GetSuppliersQueryHandler(
 {
     public async Task<Result<PaginatedResponse<SupplierListResponse>>> Handle(GetSuppliersQuery request, CancellationToken cancellationToken)
     {
-        var suppliers = await repository.GetAllAsync(request.Page, request.PageSize, cancellationToken);
+        var suppliers = await repository.GetAllAsync(request.Page, request.PageSize, request.Search, cancellationToken);
         var suppliersCount = await repository.CountAsync(cancellationToken);
 
         return Result<PaginatedResponse<SupplierListResponse>>.Success(new PaginatedResponse<SupplierListResponse>(

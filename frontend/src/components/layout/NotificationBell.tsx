@@ -46,6 +46,7 @@ function NotificationItem({
         <p className='text-xs text-gray-400 mt-1'>
           {new Date(notification.createdAt).toLocaleDateString([], {
             hour: '2-digit',
+            minute: '2-digit'
           })}
         </p>
       </div>

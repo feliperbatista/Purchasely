@@ -1,11 +1,11 @@
 import { useNavigate } from 'react-router-dom';
 import { usePurchaseOrders } from '../../hooks/usePurchaseOrders';
-import { useSuppliers } from '../../hooks/useSuppliers';
 import { statuses, type Status } from '../../types/status';
 import { ShoppingCart, X } from 'lucide-react';
 import SkeletonRow from '../../components/purchase-orders/SkeletonRow';
 import PurchaseOrderRow from '../../components/purchase-orders/PurchaseOrderRow';
 import Pagination from '../../components/common/Pagination';
+import SupplierSearch from '../../components/suppliers/SupplierSearch';
 
 const STATUSES: Status[] = [
   'Draft',
@@ -31,8 +31,6 @@ export default function PurchaseOrdersPage() {
     clearFilters,
     setPage,
   } = usePurchaseOrders();
-
-  const { suppliers } = useSuppliers();
 
   const hasActiveFilters =
     !!filters.status || !!filters.supplierId || !!filters.from || !!filters.to;
@@ -62,18 +60,10 @@ export default function PurchaseOrdersPage() {
           ))}
         </select>
 
-        <select
+        <SupplierSearch
           value={filters.supplierId ?? ''}
-          onChange={(e) => setFilter('supplierId', e.target.value || undefined)}
-          className='px-3 py-2 text-sm border border-gray-200 rounded-lg bg-white text-gray-900 outline-none focus:ring-2 focus:ring-orange-400'
-        >
-          <option value=''>All suppliers</option>
-          {suppliers.map((s) => (
-            <option key={s.id} value={s.id}>
-              {s.name}
-            </option>
-          ))}
-        </select>
+          onChange={(e) => setFilter('supplierId', e || undefined)}
+        />
 
         <input
           type='date'

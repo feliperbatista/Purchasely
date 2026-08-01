@@ -8,9 +8,13 @@ import type {
 } from '../types/supplier';
 
 export const suppliersApi = {
-  getAll: async (page = 1, pageSize = 10): Promise<PagedResult<Supplier>> => {
+  getAll: async (
+    page = 1,
+    pageSize = 10,
+    search = '',
+  ): Promise<PagedResult<Supplier>> => {
     const res = await api.get(
-      `/api/suppliers?page=${page}&pageSize=${pageSize}`,
+      `/api/suppliers?page=${page}&pageSize=${pageSize}&search=${search}`,
     );
     return res.data;
   },

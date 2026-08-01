@@ -6,7 +6,7 @@ import type {
   CreateSupplierRequest,
 } from '../types/supplier';
 
-export function useSuppliers(id?: string) {
+export function useSuppliers(id?: string, search = '') {
   const queryClient = useQueryClient();
   const [page, setPage] = useState(1);
   const invalidateQueries = queryClient.invalidateQueries({
@@ -22,6 +22,12 @@ export function useSuppliers(id?: string) {
     queryKey: ['suppliers', id],
     queryFn: () => suppliersApi.getOne(id),
     enabled: !!id,
+  });
+
+  const searchQuery = useQuery({
+    queryKey: ['products', 'search', search],
+    queryFn: () => suppliersApi.getAll(1, 10, search),
+    enabled: search.length > 0,
   });
 
   const create = useMutation({
@@ -71,5 +77,7 @@ export function useSuppliers(id?: string) {
     remove,
     addProduct,
     removeProduct,
+    searchResults: searchQuery.data?.items ?? [],
+    isSearching: searchQuery.isLoading,
   };
 }

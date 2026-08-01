@@ -2,7 +2,7 @@ export interface User {
   id: string;
   name: string;
   email: string;
-  role: "Admin" | "Buyer" | "Approver" | "Requester";
+  role: "Admin" | "Buyer" | "Manager" | "Requester";
 }
 
 export interface LoginRequest {

@@ -107,18 +107,18 @@ export default function RequisitionDetailPage() {
   const canSubmit =
     requisition.status === 'Draft' && user?.id === requisition.requesterId;
   const canApprove =
-    (user?.role === 'Approver' ||
+    (user?.role === 'Manager' ||
       user?.role === 'Buyer' ||
       user?.role === 'Admin') &&
     requisition.status === 'Submitted';
   const canRemoveApproval =
-    (user?.role === 'Approver' ||
+    (user?.role === 'Manager' ||
       user?.role === 'Buyer' ||
       user?.role === 'Admin') &&
     requisition.status === 'Approved' &&
     user?.id === requisition.requesterId;
   const canReject =
-    (user?.role === 'Approver' ||
+    (user?.role === 'Manager' ||
       user?.role === 'Buyer' ||
       user?.role === 'Admin') &&
     requisition.status === 'Submitted';

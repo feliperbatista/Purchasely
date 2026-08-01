@@ -19,7 +19,8 @@ public class GetCurrentUserQueryHandler(
             currentUser.Id,
             currentUser.Name,
             currentUser.Email,
-            Enum.Parse<UserRole>(currentUser.Role)
+            Enum.Parse<UserRole>(currentUser.Role),
+            null
         ));
     }
 }

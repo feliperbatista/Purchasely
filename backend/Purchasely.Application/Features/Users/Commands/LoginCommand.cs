@@ -33,6 +33,6 @@ public class LoginCommandHandler(
         user.SetRefreshToken(refreshToken);
         await repository.SaveChangesAsync(cancellationToken);
 
-        return Result<LoginResponse>.Success(new LoginResponse(new TokensResponse(token, refreshToken), new UserResponse(user.Id, user.Name, user.Email, user.Role)));
+        return Result<LoginResponse>.Success(new LoginResponse(new TokensResponse(token, refreshToken), new UserResponse(user.Id, user.Name, user.Email, user.Role, user.CreatedAt)));
     }
 }

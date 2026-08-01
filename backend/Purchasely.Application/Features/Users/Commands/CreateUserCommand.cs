@@ -31,6 +31,6 @@ public class CreateUserCommandHandler(
         await repository.AddAsync(user, cancellationToken);
         await repository.SaveChangesAsync(cancellationToken);
 
-        return Result<UserResponse>.Success(new UserResponse(user.Id, user.Name, user.Email, user.Role));
+        return Result<UserResponse>.Success(new UserResponse(user.Id, user.Name, user.Email, user.Role, user.CreatedAt));
     }
 }

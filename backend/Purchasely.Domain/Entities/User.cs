@@ -44,4 +44,6 @@ public class User
         RefreshToken is not null &&
         RefreshTokenExpiresAt.HasValue &&
         DateTime.UtcNow < RefreshTokenExpiresAt;
+
+    public void ChangeRole(UserRole role) => Role = role;
 }

@@ -13,10 +13,30 @@ public class UserRepository(AppDbContext context) : IUserRepository
        await context.Users.AddAsync(user, cancellationToken);
     }
 
+    public async Task<int> CountAsync(CancellationToken cancellationToken)
+    {
+        return await context.Users.CountAsync(cancellationToken);
+    }
+
+    public async Task<List<User>> GetAllAsync(int page, int pageSize, CancellationToken cancellationToken)
+    {
+        return await context.Users
+            .AsNoTracking()
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
+            .ToListAsync(cancellationToken);
+    }
+
     public async Task<User?> GetByEmailAsync(string email, CancellationToken cancellationToken)
     {
         return await context.Users
             .FirstOrDefaultAsync(x => x.Email == email, cancellationToken);
+    }
+
+    public async Task<User?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
+    {
+         return await context.Users
+            .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
     }
 
     public async Task<User?> GetByRefreshTokenAsync(string token, CancellationToken cancellationToken)

@@ -7,8 +7,8 @@ namespace Purchasely.Infrastructure.Services;
 
 public class AzureBlobStorageService(IConfiguration configuration) : IFileStorageService
 {
-    private readonly string _connectionString = configuration["AzureBlobStorage:ConnectionString"]!;
-    private readonly string _containerName = configuration["AzureBlobStorage:ContainerName"]!;
+    private readonly string _connectionString = configuration["BlobStorage:ConnectionString"]!;
+    private readonly string _containerName = configuration["BlobStorage:ContainerName"]!;
     
     private BlobContainerClient GetContainerClient()
     {

@@ -1,0 +1,68 @@
+name: Build and deploy ASP.Net Core app to Azure Web App - purchasely
+
+on:
+  push:
+    branches:
+      - master
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+    permissions:
+      contents: read #This is required for actions/checkout
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up .NET Core
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.x'
+
+      - name: Restore
+        run: dotnet restore backend/Purchasely.API/Purchasely.API.csproj
+
+      - name: Build
+        run: dotnet build backend/Purchasely.API/Purchasely.API.csproj --configuration Release --no-restore
+
+      - name: Test
+        run: dotnet test backend/Purchasely.UnitTests/Purchasely.UnitTests.csproj --no-restore
+
+      - name: Publish
+        run: dotnet publish backend/Purchasely.API/Purchasely.API.csproj -c Release -o ${{env.DOTNET_ROOT}}/myapp --no-build
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: .net-app
+          path: ${{env.DOTNET_ROOT}}/myapp
+
+  deploy:
+    runs-on: windows-latest
+    needs: build
+    permissions:
+      id-token: write
+      contents: read 
+
+    steps:
+      - name: Download artifact from build job
+        uses: actions/download-artifact@v4
+        with:
+          name: .net-app
+      
+      - name: Login to Azure
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_029B07EA683E4206895F175C3F5ED810 }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_AF0533554F4540E19C9BBF56C4D32537 }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_5E326121CECA45B4AB1110777A22C098 }}
+
+      - name: Deploy to Azure Web App
+        id: deploy-to-webapp
+        uses: azure/webapps-deploy@v3
+        with:
+          app-name: 'purchasely'
+          slot-name: 'Production'
+          package: .
+          

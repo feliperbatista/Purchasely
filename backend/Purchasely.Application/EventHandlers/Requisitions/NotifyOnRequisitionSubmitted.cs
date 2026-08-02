@@ -15,7 +15,10 @@ public class NotifyOnRequisitionSubmitted(
         var newNotification = Notification.Create(
             notification.RequesterId,
             "Requisition Submitted",
-            $"Requisition #{notification.RequisitionNumber} was submitted");
+            $"Requisition #{notification.RequisitionNumber} was submitted",
+            "info",
+            notification.RequisitionId,
+            "Requisition");
 
         await notificationRepo.AddAsync(newNotification, cancellationToken);
 

@@ -12,7 +12,14 @@ public class NotifyOnPOReceived(
 {
     public async Task Handle(PurchaseOrderReceivedEvent notification, CancellationToken cancellationToken)
     {
-        var newNotification = Notification.Create(notification.CreatedBy, "Purchase Order Received", $"Requisition #{notification.PoNumber} was received.");
+        var newNotification = Notification.Create(
+            notification.CreatedBy,
+            "Purchase Order Received",
+            $"Requisition #{notification.PoNumber} was received.",
+            "info",
+            notification.PurchaseOrderId,
+            "PurchaseOrder"
+            );
 
         await notificationRepo.AddAsync(newNotification, cancellationToken);
 

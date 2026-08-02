@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import type { Notification } from '../../types/notification';
 import { useEffect, useRef, useState } from 'react';
 import { useNotifications } from '../../hooks/useNotifications';
-import { Bell, CheckCheck, Trash2, X } from 'lucide-react';
+import { Bell, CheckCheck, X } from 'lucide-react';
 
 type NotificationItemProps = {
   notification: Notification;
@@ -46,7 +46,7 @@ function NotificationItem({
         <p className='text-xs text-gray-400 mt-1'>
           {new Date(notification.createdAt).toLocaleDateString([], {
             hour: '2-digit',
-            minute: '2-digit'
+            minute: '2-digit',
           })}
         </p>
       </div>
@@ -62,7 +62,7 @@ export default function NotificationBell() {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
-  const { notifications, unreadCount, markAsRead, markAllAsRead, clearAll } =
+  const { notifications, unreadCount, markAsRead, markAllAsRead } =
     useNotifications();
 
   useEffect(() => {
@@ -120,15 +120,6 @@ export default function NotificationBell() {
                   title='Mark all as read'
                 >
                   <CheckCheck className='w-4 h-4' />
-                </button>
-              )}
-              {notifications.length > 0 && (
-                <button
-                  onClick={clearAll}
-                  className='p-1.5 rounded-lg text-gray-400 hover:text-red-500 hover:bg-red-50 transition'
-                  title='Clear all'
-                >
-                  <Trash2 className='w-4 h-4' />
                 </button>
               )}
               <button

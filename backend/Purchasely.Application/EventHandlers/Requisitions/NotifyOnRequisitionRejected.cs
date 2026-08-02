@@ -12,7 +12,12 @@ public class NotifyOnRequisitionRejected(
 {
     public async Task Handle(RequisitionRejectedEvent notification, CancellationToken cancellationToken)
     {
-        var newNotification = Notification.Create(notification.RequesterId, "Requisition Rejected", $"Requisition #{notification.RequisitionNumber} was Rejected. Reason: {notification.Reason}");
+        var newNotification = Notification.Create(notification.RequesterId,
+        "Requisition Rejected",
+        $"Requisition #{notification.RequisitionNumber} was Rejected. Reason: {notification.Reason}",
+        "info",
+        notification.RequisitionId,
+        "Requisition");
 
         await notificationRepo.AddAsync(newNotification, cancellationToken);
 

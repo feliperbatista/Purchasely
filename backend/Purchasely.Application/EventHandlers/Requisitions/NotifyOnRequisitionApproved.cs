@@ -12,7 +12,13 @@ public class NotifyOnRequisitionApproved(
 {
     public async Task Handle(RequisitionApprovedEvent notification, CancellationToken cancellationToken)
     {
-        var newNotification = Notification.Create(notification.RequesterId, "Requisition Approved", $"Requisition #{notification.RequisitionNumber} was approved.");
+        var newNotification = Notification.Create(
+            notification.RequesterId,
+            "Requisition Approved",
+            $"Requisition #{notification.RequisitionNumber} was approved.",
+            "info",
+            notification.RequisitionId,
+            "Requisition");
 
         await notificationRepo.AddAsync(newNotification, cancellationToken);
 

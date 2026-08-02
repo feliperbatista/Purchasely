@@ -3,35 +3,48 @@ import { useAuth } from './useAuth';
 import type { Notification } from '../types/notification';
 import { toast } from 'sonner';
 import { getConnection, startConnection, stopConnection } from '../lib/signalr';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { notificationsApi } from '../api/notifications';
+import { queryClient } from '../lib/queryClient';
 
 export function useNotifications() {
   const { user } = useAuth();
-  const [notifications, setNotifications] = useState<Notification[]>([]);
   const [connected, setConnected] = useState(false);
 
-  const addNotification = useCallback(
-    (payload: Omit<Notification, 'id' | 'createdAt' | 'read'>) => {
-      const notification: Notification = {
-        ...payload,
-        id: crypto.randomUUID(),
-        createdAt: new Date().toISOString(),
-        read: false,
-      };
+  const { data: notifications = [] } = useQuery({
+    queryKey: ['notifications'],
+    queryFn: notificationsApi.getAll,
+    enabled: !!user,
+  });
 
-      setNotifications((prev) => [notification, ...prev]);
+  const markAsRead = useMutation({
+    mutationFn: (id: string) => notificationsApi.markAsRead(id),
+    onSuccess: () =>
+      queryClient.invalidateQueries({ queryKey: ['notifications'] }),
+  });
 
-      const toastFn =
-        {
-          sucess: toast.success,
-          error: toast.error,
-          warning: toast.warning,
-          info: toast.info,
-        }[payload.type] ?? toast.info;
+  const markAllAsRead = useMutation({
+    mutationFn: notificationsApi.markAllAsRead,
+    onSuccess: () =>
+      queryClient.invalidateQueries({ queryKey: ['notifications'] }),
+  });
 
-      toastFn(payload.title, { description: payload.message });
-    },
-    [],
-  );
+  const handleIncoming = useCallback((payload: Notification) => {
+    queryClient.setQueryData<Notification[]>(['notifications'], (prev = []) => [
+      payload,
+      ...prev,
+    ]);
+
+    const toastFn =
+      {
+        success: toast.success,
+        error: toast.error,
+        warning: toast.warning,
+        info: toast.info,
+      }[payload.type] ?? toast.info;
+
+    toastFn(payload.title, { description: payload.message });
+  }, []);
 
   useEffect(() => {
     if (!user) return;
@@ -45,10 +58,7 @@ export function useNotifications() {
 
         setConnected(true);
 
-        conn.on('ReceiveNotification', (payload) => {
-          if (!mounted) return;
-          addNotification(payload);
-        });
+        conn.on('ReceiveNotification', handleIncoming);
       } catch (err) {
         console.error('SignalR connection failed:', err);
       }
@@ -63,19 +73,7 @@ export function useNotifications() {
       stopConnection();
       setConnected(false);
     };
-  }, [user, addNotification]);
-
-  const markAsRead = useCallback((id: string) => {
-    setNotifications((prev) =>
-      prev.map((n) => (n.id === id ? { ...n, read: true } : n)),
-    );
-  }, []);
-
-  const markAllAsRead = useCallback(() => {
-    setNotifications((prev) => prev.map((n) => ({ ...n, read: true })));
-  }, []);
-
-  const clearAll = useCallback(() => setNotifications([]), []);
+  }, [user, handleIncoming]);
 
   const unreadCount = notifications.filter((n) => !n.read).length;
 
@@ -83,8 +81,7 @@ export function useNotifications() {
     notifications,
     unreadCount,
     connected,
-    markAsRead,
-    markAllAsRead,
-    clearAll,
+    markAsRead: (id: string) => markAsRead.mutate(id),
+    markAllAsRead: () => markAllAsRead.mutate(),
   };
 }

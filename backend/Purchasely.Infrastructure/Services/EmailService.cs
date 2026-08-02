@@ -23,6 +23,11 @@ public class EmailService(IConfiguration configuration) : IEmailService
             cancellationToken
         );
 
+        var username = configuration["Email:Username"];
+        var password = configuration["Email:Password"];
+        if (!string.IsNullOrEmpty(username) && !string.IsNullOrEmpty(password))
+            await client.AuthenticateAsync(username, password, cancellationToken);
+
         await client.SendAsync(message, cancellationToken);
         await client.DisconnectAsync(true, cancellationToken);
     }

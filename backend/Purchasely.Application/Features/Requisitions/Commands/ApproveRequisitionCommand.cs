@@ -13,7 +13,8 @@ public record ApproveRequisitionCommand(
 public class ApproveRequisitionCommandHandler(
     IRequisitionRepository requisitionRepo,
     IMediator mediator,
-    ICurrentUserService currentUser
+    ICurrentUserService currentUser,
+    ICacheService cache
 ) : IRequestHandler<ApproveRequisitionCommand, Result<Unit>>
 {
     public async Task<Result<Unit>> Handle(ApproveRequisitionCommand request, CancellationToken cancellationToken)
@@ -37,6 +38,8 @@ public class ApproveRequisitionCommandHandler(
         await requisitionRepo.AddApprovalAsync(requisition.Approvals.Last(), cancellationToken);
         
         await requisitionRepo.SaveChangesAsync(cancellationToken);
+
+        await cache.RemoveAsync("dashboard:stats", cancellationToken);
 
         await mediator.Publish(new RequisitionApprovedEvent(
             request.Id,

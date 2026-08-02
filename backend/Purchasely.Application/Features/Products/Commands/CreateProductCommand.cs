@@ -14,7 +14,8 @@ public record CreateProductCommand(
 ) : IRequest<Result<ProductResponse>>;
 
 public class CreateProductCommandHandler(
-    IProductRepository productRepo
+    IProductRepository productRepo,
+    ICacheService cache
 ) : IRequestHandler<CreateProductCommand, Result<ProductResponse>>
 {
     public async Task<Result<ProductResponse>> Handle(CreateProductCommand request, CancellationToken cancellationToken)
@@ -23,6 +24,8 @@ public class CreateProductCommandHandler(
         
         await productRepo.AddAsync(product, cancellationToken);
         await productRepo.SaveChangesAsync(cancellationToken);
+        
+        await cache.RemoveAsync("products:all", cancellationToken);
 
         return Result<ProductResponse>.Success(new ProductResponse(product.Id, product.SKU, product.Name, product.Description, product.Category, product.CreatedAt));
     }

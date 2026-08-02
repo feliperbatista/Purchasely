@@ -16,7 +16,8 @@ public record CreateRequisitionCommand(
 public class CreateRequisitionCommandHandler(
     IRequisitionRepository requisitionRepo,
     IProductRepository productRepo,
-    ICurrentUserService currentUserService
+    ICurrentUserService currentUserService,
+    ICacheService cache
 ) : IRequestHandler<CreateRequisitionCommand, Result<RequisitionResponse>>
 {
     public async Task<Result<RequisitionResponse>> Handle(CreateRequisitionCommand request, CancellationToken cancellationToken)
@@ -47,6 +48,8 @@ public class CreateRequisitionCommandHandler(
 
         await requisitionRepo.AddAsync(requisition, cancellationToken);
         await requisitionRepo.SaveChangesAsync(cancellationToken);
+
+        await cache.RemoveAsync("dashboard:stats", cancellationToken);
 
         return Result<RequisitionResponse>.Success(new RequisitionResponse(
                 requisition.Id,

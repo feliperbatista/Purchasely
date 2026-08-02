@@ -7,16 +7,16 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_DB: ${POSTGRES_DB}
     ports:
-      - "5432:5432"
+      - '5432:5432'
     volumes:
       - purchasely_pgdata:/var/lib/postgresql/data
 
   azurite:
     image: mcr.microsoft.com/azure-storage/azurite
     ports:
-      - "10000:10000"
-      - "10001:10001"
-      - "10002:10002"
+      - '10000:10000'
+      - '10001:10001'
+      - '10002:10002'
     command: azurite --blobHost 0.0.0.0 --skipApiVersionCheck
     volumes:
       - azurite_data:/data
@@ -24,8 +24,8 @@ services:
   rabbitmq:
     image: rabbitmq:3-management
     ports:
-      - "5672:5672"
-      - "15672:15672"
+      - '5672:5672'
+      - '15672:15672'
     environment:
       RABBITMQ_DEFAULT_USER: guest
       RABBITMQ_DEFAULT_PASS: guest
@@ -33,9 +33,17 @@ services:
   mailhog:
     image: mailhog/mailhog
     ports:
-      - "1025:1025"
-      - "8025:8025"
+      - '1025:1025'
+      - '8025:8025'
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - '6379:6379'
+    volumes:
+      - redis_data:/data
 
 volumes:
   purchasely_pgdata:
   azurite_data:
+  redis_data:

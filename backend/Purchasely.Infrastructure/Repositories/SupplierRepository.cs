@@ -12,31 +12,16 @@ public class SupplierRepository(AppDbContext context) : ISupplierRepository
         await context.Suppliers.AddAsync(supplier, cancellationToken);
     }
 
-    public async Task<int> CountAsync(CancellationToken cancellationToken)
-    {
-        return await context.Suppliers.CountAsync(cancellationToken);
-    }
-
     public void Delete(Supplier supplier)
     {
         context.Suppliers.Remove(supplier);
     }
 
-    public async Task<List<Supplier>> GetAllAsync(int page, int pageSize, string? search, CancellationToken cancellationToken)
+    public async Task<List<Supplier>> GetAllAsync(CancellationToken cancellationToken)
     {
-        var query = context.Suppliers.AsQueryable();
-
-        if (!string.IsNullOrEmpty(search))
-        {
-            var term = $"%{search}%";
-            query = query.Where(s => EF.Functions.ILike(s.Name, term));
-        }
-
-        return await query
+        return await context.Suppliers
             .AsNoTracking()
-            .OrderBy(s => s.Name)
-            .Skip((page - 1) * pageSize)
-            .Take(pageSize)
+
             .ToListAsync(cancellationToken);
     }
 

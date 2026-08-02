@@ -7,6 +7,7 @@ using Purchasely.Infrastructure.Persistence;
 using Purchasely.Infrastructure.Repositories;
 using Purchasely.Infrastructure.Services;
 using RabbitMQ.Client;
+using StackExchange.Redis;
 
 namespace Purchasely.Infrastructure.Extensions;
 
@@ -17,6 +18,10 @@ public static class InfrastructureServiceExtension
         services.AddDbContext<AppDbContext>(config =>
         {
             config.UseNpgsql(configuration.GetConnectionString("DefaultConnection"));
+        });
+        services.AddStackExchangeRedisCache(options =>
+        {
+            options.Configuration = configuration["Redis:ConnectionString"];
         });
 
         services.AddScoped<ISupplierRepository, SupplierRepository>();
@@ -40,9 +45,12 @@ public static class InfrastructureServiceExtension
             };
             return factory.CreateConnectionAsync().GetAwaiter().GetResult();
         });
+        services.AddSingleton<IConnectionMultiplexer>(_ => 
+            ConnectionMultiplexer.Connect(configuration["Redis:ConnectionString"]!));
 
         services.AddScoped<IBus, RabbitMqBus>();
         services.AddHostedService<EmailConsumerWorker>();
         services.AddScoped<IEmailService, EmailService>();
+        services.AddScoped<ICacheService, RedisCacheService>();
     }
 }

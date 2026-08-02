@@ -23,7 +23,8 @@ public class ConvertRequisitionToPOCommandHandler(
     ISupplierRepository supplierRepo,
     IPurchaseOrderRepository purchaseOrderRepo,
     ICurrentUserService currentUser,
-    IMediator mediator
+    IMediator mediator,
+    ICacheService cache
 ) : IRequestHandler<ConvertRequisitionToPOCommand, Result<CreatePurchaseOrderResponse>>
 {
     public async Task<Result<CreatePurchaseOrderResponse>> Handle(ConvertRequisitionToPOCommand request, CancellationToken cancellationToken)
@@ -77,6 +78,8 @@ public class ConvertRequisitionToPOCommandHandler(
         requisition.ConvertToPO();
         
         await requisitionRepo.SaveChangesAsync(cancellationToken);
+
+        await cache.RemoveAsync("dashboard:stats", cancellationToken);
 
         await mediator.Publish(new RequisitionConvertedToPOEvent(
             requisition.Id,

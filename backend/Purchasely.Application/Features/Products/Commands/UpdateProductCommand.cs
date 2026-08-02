@@ -13,7 +13,8 @@ public record UpdateProductCommand(
 ) : IRequest<Result<Unit>>;
 
 public class UpdateProductCommandHandler(
-    IProductRepository repository
+    IProductRepository repository,
+    ICacheService cache
 ) : IRequestHandler<UpdateProductCommand, Result<Unit>>
 {
     public async Task<Result<Unit>> Handle(UpdateProductCommand request, CancellationToken cancellationToken)
@@ -25,6 +26,8 @@ public class UpdateProductCommandHandler(
         product.Update(request.SKU, request.Name, request.Description, request.Category);
         
         await repository.SaveChangesAsync(cancellationToken);
+
+        await cache.RemoveAsync("products:all", cancellationToken);
         
         return Result<Unit>.Success(Unit.Value);
     }

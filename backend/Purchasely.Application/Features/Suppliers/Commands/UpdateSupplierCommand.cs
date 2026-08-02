@@ -14,7 +14,8 @@ public record UpdateSupplierCommand(
 ) : IRequest<Result<Unit>>;
 
 public class UpdateSupplierCommandHandler(
-    ISupplierRepository repository
+    ISupplierRepository repository,
+    ICacheService cache
 ) : IRequestHandler<UpdateSupplierCommand, Result<Unit>>
 {
     public async Task<Result<Unit>> Handle(UpdateSupplierCommand request, CancellationToken cancellationToken)
@@ -27,6 +28,8 @@ public class UpdateSupplierCommandHandler(
         
         await repository.SaveChangesAsync(cancellationToken);
         
+        await cache.RemoveAsync("suppliers:all", cancellationToken);
+
         return  Result<Unit>.Success(Unit.Value);
     }
 }

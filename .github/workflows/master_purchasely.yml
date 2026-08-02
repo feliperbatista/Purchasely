@@ -30,13 +30,13 @@ jobs:
         run: dotnet test backend/Purchasely.UnitTests/Purchasely.UnitTests.csproj --no-restore
 
       - name: Publish
-        run: dotnet publish backend/Purchasely.API/Purchasely.API.csproj -c Release -o ${{env.DOTNET_ROOT}}/myapp --no-build
+        run: dotnet publish backend/Purchasely.API/Purchasely.API.csproj -c Release -o ./publish --no-build
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: .net-app
-          path: ${{env.DOTNET_ROOT}}/myapp
+          path: ./publish
 
   deploy:
     runs-on: windows-latest

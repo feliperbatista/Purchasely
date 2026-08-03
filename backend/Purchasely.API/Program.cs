@@ -109,6 +109,10 @@ if (app.Environment.IsDevelopment())
     app.MapScalarApiReference();
     app.UseCors("Dev");
 }
+else
+{
+    app.UseCors("Prod");
+}
 
 app.UseHttpsRedirection();
 app.UseExceptionHandler();

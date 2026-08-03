@@ -80,6 +80,17 @@ if (builder.Environment.IsDevelopment())
             .AllowCredentials());
     });
 }
+else
+{
+    builder.Services.AddCors(options =>
+    {
+        options.AddPolicy("Prod", policy => policy
+            .WithOrigins("https://purchasely.vercel.app")
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials());
+    });
+}
 
 var app = builder.Build();
 

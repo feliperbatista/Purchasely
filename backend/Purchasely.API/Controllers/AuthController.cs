@@ -71,6 +71,17 @@ public class AuthController(
         return NoContent();
     }
 
+    [HttpPost("setup")]
+    public async Task<IActionResult> Setup([FromBody] CreateUserCommand command, CancellationToken cancellationToken)
+    {
+        var hasUsers = await mediator.Send(new HasUsersQuery(), cancellationToken);
+        if (hasUsers.Value)
+            return Forbid();
+
+        var result = await mediator.Send(command, cancellationToken);
+        return result.IsSuccess ? Ok(result.Value) : StatusCode(result.StatusCode, result.Errors);
+    }
+
     private void AppendCookies(string accessToken, string refreshToken)
     {
         var accessTokenOptions = new CookieOptions

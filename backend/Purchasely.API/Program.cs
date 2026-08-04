@@ -85,7 +85,7 @@ else
     builder.Services.AddCors(options =>
     {
         options.AddPolicy("Prod", policy => policy
-            .WithOrigins("https://purchasely.vercel.app")
+            .WithOrigins("https://purchasely.vercel.app", "https://purchasely.onrender.com")
             .AllowAnyHeader()
             .AllowAnyMethod()
             .AllowCredentials());

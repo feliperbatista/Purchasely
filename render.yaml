@@ -1,0 +1,44 @@
+services:
+  - type: web
+    name: purchasely-api
+    runtime: docker
+    dockerfilePath: ./backend/Dockerfile
+    dockerContext: ./backend
+    plan: free
+    envVars:
+      - key: ASPNETCORE_ENVIRONMENT
+        value: Production
+      - key: ASPNETCORE_URLS
+        value: http://+:8080
+      - key: ConnectionStrings__DefaultConnection
+        sync: false
+      - key: Jwt__Issuer
+        value: Purchasely
+      - key: Jwt__Audience
+        value: Purchasely.Users
+      - key: Jwt__Secret
+        sync: false
+      - key: Jwt__ExpiryMinutes
+        value: 15
+      - key: AzureBlobStorage__ConnectionString
+        sync: false
+      - key: AzureBlobStorage__ContainerName
+        value: po-receipts
+      - key: RabbitMQ__Host
+        sync: false
+      - key: RabbitMQ__Username
+        sync: false
+      - key: RabbitMQ__Password
+        sync: false
+      - key: Email__Host
+        sync: false
+      - key: Email__Port
+        sync: false
+      - key: Email__From
+        sync: false
+      - key: Email__Username
+        sync: false
+      - key: Email__Password
+        sync: false
+      - key: Redis__ConnectionString
+        sync: false

@@ -1,0 +1,18 @@
+FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS base
+WORKDIR /app
+EXPOSE 8080
+
+FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
+WORKDIR /src
+COPY ["Purchasely.API/Purchasely.API.csproj", "Purchasely.API/"]
+COPY ["Purchasely.Application/Purchasely.Application.csproj", "Purchasely.Application/"]
+COPY ["Purchasely.Domain/Purchasely.Domain.csproj", "Purchasely.Domain/"]
+COPY ["Purchasely.Infrastructure/Purchasely.Infrastructure.csproj", "Purchasely.Infrastructure/"]
+RUN dotnet restore "Purchasely.API/Purchasely.API.csproj"
+COPY . .
+RUN dotnet publish "Purchasely.API/Purchasely.API.csproj" -c Release -o /app/publish
+
+FROM base AS final
+WORKDIR /app
+COPY --from=build /app/publish .
+ENTRYPOINT ["dotnet", "Purchasely.API.dll"]

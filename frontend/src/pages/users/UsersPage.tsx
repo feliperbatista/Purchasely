@@ -30,7 +30,7 @@ export default function UsersPage() {
       <div className='flex items-center justify-between'>
         <div>
           <h1 className='text-lg font-semibold text-gray-900'>Users</h1>
-          <p className='text-sm text-gray-500 mt-0.5'>
+          <p>
             {totalCount} users total
           </p>
         </div>

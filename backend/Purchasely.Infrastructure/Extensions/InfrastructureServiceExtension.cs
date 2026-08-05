@@ -39,7 +39,9 @@ public static class InfrastructureServiceExtension
         {
             var factory = new ConnectionFactory
             {
-                Uri = new Uri(configuration["RabbitMQ:Uri"]!)
+                HostName = configuration["RabbitMQ:Host"]!,
+                UserName = configuration["RabbitMQ:Username"]!,
+                Password = configuration["RabbitMQ:Password"]!,
             };
             return factory.CreateConnectionAsync().GetAwaiter().GetResult();
         });

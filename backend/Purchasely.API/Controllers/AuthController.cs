@@ -87,8 +87,8 @@ public class AuthController(
         var accessTokenOptions = new CookieOptions
         {
             HttpOnly = true,
-            Secure = true,
-            SameSite = environment.IsDevelopment() ? SameSiteMode.Lax : SameSiteMode.None,
+            Secure = !environment.IsDevelopment(),
+            SameSite = environment.IsDevelopment() ? SameSiteMode.Lax : SameSiteMode.Strict,
             Expires = DateTimeOffset.UtcNow.AddMinutes(15)
         };
 
@@ -97,8 +97,8 @@ public class AuthController(
         var refreshTokenOptions = new CookieOptions
         {
             HttpOnly = true,
-            Secure = true,
-            SameSite = environment.IsDevelopment() ? SameSiteMode.Lax : SameSiteMode.None,
+            Secure = !environment.IsDevelopment(),
+            SameSite = environment.IsDevelopment() ? SameSiteMode.Lax : SameSiteMode.Strict,
             Expires = DateTimeOffset.UtcNow.AddDays(7)
         };
 

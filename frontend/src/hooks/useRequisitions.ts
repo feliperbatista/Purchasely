@@ -53,8 +53,10 @@ export function useRequisitions(id?: string) {
       requisitionId: string;
       reason: string;
     }) => requisitionsApi.reject(requisitionId, reason),
-    onSuccess: () =>
-      queryClient.invalidateQueries({ queryKey: ['requisitions', id] }),
+     onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['requisitions'] });
+      queryClient.invalidateQueries({ queryKey: ['requisitions', id] });
+    },
   });
 
   const removeApproval = useMutation({
@@ -116,6 +118,6 @@ export function useRequisitions(id?: string) {
     reject,
     removeApproval,
     convertToPO,
-    update
+    update,
   };
 }
